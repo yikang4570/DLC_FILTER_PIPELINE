@@ -51,7 +51,6 @@ class Manager:
             self.single_process(path)
             self.fully_processed_list.append(path)
 
-
     def single_process(self,path=None):
         # INITIALIZE VIDEO PATH
         if path is None: path = self.video_paths[0]
@@ -72,16 +71,50 @@ class Manager:
             self.df = pd.read_hdf(self.data_file_name + '.h5')
             print("HDF5 file: " + self.data_file_name + '.h5' + " successfully loaded.")
         except Exception as e:
-            print(f"Error reading HDF5 file:" + self.data_file_name + " ERROR: {e}")
+            print(f"Error reading HDF5 file:" + self.data_file_name + f" ERROR: {e}")
             return
 
         # FILTER H5
         if self.verbose: print("Initial DataFrame:", self.df.head())
-        self.df_processed = self.custom_filter(self.df, self.current_path)
+        self.df_processed = self.custom_filter()
         if self.verbose: print("Processed DataFrame:", self.df_processed.head())
 
         # SAVE FILES
         self.save() if self.save_files == True else print("Files not saving per user settings")
+
+    def custom_filter(self):
+        print(self.df.columns.names)
+        self.processed_df = self.df*2
+        self.plot_generator()
+
+    def plot_generator(self):
+        title = self.current_path.split(os.sep)[-1]
+
+        df_pre, df_post = self.simplify_df(self.df), self.simplify_df(self.processed_df)
+
+        df_pre = df_pre[df_pre['likelihood'] > self.pcutoff].copy()
+        df_pre = df_pre.sort_values(by='bodyparts', ascending=True)
+        df_post = df_post[df_post['likelihood'] > self.pcutoff].copy()
+        df_post = df_post.sort_values(by='bodyparts', ascending=True)
+
+        plotter1 = rp.scatter(df_pre[df_pre['bodyparts'].isin(self.bodyparts)],
+                              xlab='x', ylab='frame', zlab='bodyparts', colors=self.palette)
+        plotter2 = rp.scatter(df_pre[df_pre['bodyparts'].isin(self.bodyparts)],
+                              xlab='x', ylab='y', zlab='bodyparts', colors=self.palette)
+        plotter3 = rp.scatter(df_post[df_post['bodyparts'].isin(self.bodyparts)],
+                              xlab='x', ylab='frame', zlab='bodyparts', colors=self.palette)
+        plotter4 = rp.scatter(df_post[df_post['bodyparts'].isin(self.bodyparts)],
+                              xlab='x', ylab='y', zlab='bodyparts', colors=self.palette)
+
+        sub = rp.subplots(2, 2)
+        fig, axes = sub.plot(plotter1, {'title': title + " pre-filtered", 'linewidth': 0, 's': self.s},
+                             plotter2, {'title': title + " pre-filtered", 'linewidth': 0, 's': self.s},
+                             plotter3, {'title': title + " post-filtered", 'linewidth': 0, 's': self.s},
+                             plotter4, {'title': title + " post-filtered", 'linewidth': 0, 's': self.s},
+                             figsize=(6, 5), dpi=200, folder_name=self.data_file_name + "_SUB.png")
+
+        axes[0,1].get_legend().set_visible(False)
+        axes[1,1].get_legend().set_visible(False)
 
 
 # %% INTERNAL METHODS
@@ -94,7 +127,7 @@ class Manager:
         root.destroy()
         return
 
-    def simplify_df(df):
+    def simplify_df(self,df):
         cs = ['frame', 'x', 'y', 'likelihood', 'bodyparts']
         scorer = df.columns.get_level_values(0).unique().tolist()[0]
         bodyparts = df.columns.get_level_values(1).unique().tolist()
@@ -114,27 +147,30 @@ class Manager:
 
     def save(self):
         # SAVE H5
+        self.df = pd.DataFrame(self.df)
         try:
             self.df.to_hdf(self.data_file_name + '_backup.h5', key='df', mode='w')
-            self.df_processed.to_hdf(self.data_file_name + '.h5', key='df', mode='w')
+            self.processed_df.to_hdf(self.data_file_name + '.h5', key='df', mode='w')
             print(f"Processed data successfully written for '{self.data_file_name}'.h5.")
         except Exception as e:
-            print(f"Error writing: " + self.data_file_name + ".h5 to HDF5 file: {e}")
+            print(f"Error writing: " + self.data_file_name + f".h5 to HDF5 file: {e}")
             return
 
         # SAVE CSV
         try:
             self.df.to_csv(self.data_file_name + '_backup.csv', index=True)
-            self.df_processed.to_csv(self.data_file_name + '.csv', index=True)
+            self.processed_df.to_csv(self.data_file_name + '.csv', index=True)
             print(f"Processed data successfully saved as CSV to '{self.data_file_name}'.csv.")
         except Exception as e:
-            print(f"Error writing:" + self.data_file_name + ".csv to CSV file: {e}")
+            print(f"Error writing:" + self.data_file_name + f".csv to CSV file: {e}")
 
     def get_text(self):
         def get_text_button():
             self.text = entry.get()
             root.withdraw()
+            root.update()
             root.destroy()
+
         root = tk.Tk()
         root.title("Text Prompt Example")
         entry = tk.Entry(root, width=30)
