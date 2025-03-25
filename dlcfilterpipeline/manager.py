@@ -17,6 +17,7 @@ import tkinter as tk
 from tkinter import filedialog
 import subprocess
 import json
+from ruamel.yaml import YAML
 
 # ML functions
 from sklearn.cluster import DBSCAN
@@ -37,6 +38,13 @@ class Manager:
     def __init__(self,input_dict):
         self.input_dict = input_dict
         for name, value in input_dict.items(): setattr(self, name, value)
+
+        self.config_path = os.getcwd() + os.sep + "dlcfilterpipeline" + os.sep + "config.yaml"
+        yaml = YAML()
+        with open(self.config_path, 'r') as file: data = yaml.load(file)
+        data['pcutoff'] = self.pcutoff
+        with open(self.config_path, 'w') as file:
+            yaml.dump(data, file)
 
         if self.verbose:
             for name, value in self.__dict__.items(): print(f"{name}: {value}")
@@ -62,11 +70,10 @@ class Manager:
         # ANALYZE VIDEO
         if self.analyze_videos:
             venv_python = "/opt/anaconda3/envs/DEEPLABCUT/bin/python"
-            config_path = os.getcwd() + os.sep + "dlcfilterpipeline" + os.sep + "config.yaml"
             subprocess.run([
                 venv_python,
                 "dlcfilterpipeline/dlc_analyze.py",
-                config_path,
+                self.config_path,
                 self.current_path,
                 self.shuffle])
 
@@ -98,15 +105,39 @@ class Manager:
         # SAVE FILES
         self.save() if self.save_files == True else print("Files not saving per user settings")
 
+        # CREATE VIDEO
+        if self.create_videos:
+            venv_python = "/opt/anaconda3/envs/DEEPLABCUT/bin/python"
+            subprocess.run([
+                venv_python,
+                "dlcfilterpipeline/dlc_create_video.py",
+                self.config_path,
+                self.current_path,
+                self.shuffle])
+
+        # ANIMATE VIDEO PLOT
+        self.animator()
+
     def custom_filter(self):
         print(self.df.columns.names)
         self.processed_df = self.df*2
         self.plot_generator()
 
-    def plot_generator(self):
+    def plot_generator(self,frame=None):
         title = self.current_path.split(os.sep)[-1]
 
         df_pre, df_post = self.simplify_df(self.df), self.simplify_df(self.processed_df)
+
+        if frame is not None:
+            combined_df = pd.concat([df_pre, df_post], axis=1)
+            xlims = (combined_df['x'].min().min(), combined_df['x'].max().max())
+            ylims = (combined_df['y'].min().min(), combined_df['y'].max().max())
+            tlims = (combined_df['frame'].min().min(), combined_df['frame'].max().max())
+
+            print(xlims,ylims,tlims)
+
+            df_pre = df_pre[df_pre['frame'] <= frame]
+            df_post = df_post[df_post['frame'] <= frame]
 
         df_pre = df_pre[df_pre['likelihood'] > self.pcutoff].copy()
         df_pre = df_pre.sort_values(by='bodyparts', ascending=True)
@@ -122,17 +153,81 @@ class Manager:
         plotter4 = rp.scatter(df_post[df_post['bodyparts'].isin(self.bodyparts)],
                               xlab='x', ylab='y', zlab='bodyparts', colors=self.palette)
 
-        sub = rp.subplots(2, 2)
+        if frame is None:sub = rp.subplots(2, 2)
+        else: sub = rp.subplots(1,4)
+
         fig, axes = sub.plot(plotter1, {'title': title + " pre-filtered", 'linewidth': 0, 's': self.s},
                              plotter2, {'title': title + " pre-filtered", 'linewidth': 0, 's': self.s},
                              plotter3, {'title': title + " post-filtered", 'linewidth': 0, 's': self.s},
                              plotter4, {'title': title + " post-filtered", 'linewidth': 0, 's': self.s},
                              figsize=(6, 5), dpi=200, folder_name=self.data_file_name + "_SUB.png")
 
-        axes[0,1].get_legend().set_visible(False)
-        axes[1,1].get_legend().set_visible(False)
+        if frame is None:
+            axes[0,1].get_legend().set_visible(False)
+            axes[1,1].get_legend().set_visible(False)
+            sub.save()
+        else:
+            axes[1].get_legend().set_visible(False)
+            axes[3].get_legend().set_visible(False)
 
-        sub.save()
+            for ax in [axes[1], axes[3]]:
+                ax.set_xlim(*xlims)
+                ax.set_ylim(*ylims)
+            for ax in [axes[0], axes[2]]:
+                ax.set_xlim(*xlims)
+                ax.set_ylim(*tlims)
+
+        return fig
+
+    def animator(self):
+        import cv2
+        import numpy as np
+        import matplotlib.pyplot as plt
+        from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+
+        # Function to create a plot
+        def create_plot(frame):
+            fig = self.plot_generator(frame)
+            canvas = FigureCanvas(fig)
+            canvas.draw()
+            buf = canvas.buffer_rgba()
+            cols, rows = fig.canvas.get_width_height()
+            img_array = np.frombuffer(buf, dtype=np.uint8).reshape(rows, cols, 4)
+            plt.close(fig)
+            return img_array[::4,::4,:3]
+
+        cap = cv2.VideoCapture(swap_ext(self.current_path,self.model_name + '_p' + str(int(self.pcutoff*100)) + '_labeled.mp4'))
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+
+        # Define the codec and create a VideoWriter object
+        out = cv2.VideoWriter(swap_ext(self.current_path,'graph_video.mp4'), cv2.VideoWriter_fourcc(*'mp4v'), fps, (frame_width, frame_height))
+
+        frame_count = 0
+        while True:
+            ret, frame = cap.read()
+            if not ret:
+                break
+
+            if frame_count % 100 == 0:
+                # Generate plot data (e.g., a simple sine wave)
+                plot_image = create_plot(frame_count)
+
+                # Resize plot to fit within the frame
+                plot_height, plot_width, _ = plot_image.shape
+                frame[0:plot_height, 0:plot_width] = plot_image[:,:,:3]
+
+                # Write the frame to the output video
+                out.write(frame)
+            frame_count += 1
+            if frame_count % 100 == 0:
+                print(f'Processed {frame_count} frames')
+
+        # Release resources
+        cap.release()
+        out.release()
+        cv2.destroyAllWindows()
 
 
 # %% INTERNAL METHODS
