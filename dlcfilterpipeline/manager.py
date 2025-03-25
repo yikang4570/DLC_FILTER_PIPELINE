@@ -58,6 +58,9 @@ class Manager:
         self.current_path = path
 
         # ANALYZE VIDEO
+        import subprocess
+        venv_python = "/opt/anaconda3/envs/DEEPLABCUT/bin/python"
+        subprocess.run([venv_python, "dlcfilterpipeline/dlc_analyze.py"])
 
         # MANAGE FILE NAMING CONVENTIONS TO FIND DATA
         if not hasattr(self, 'model_name'):

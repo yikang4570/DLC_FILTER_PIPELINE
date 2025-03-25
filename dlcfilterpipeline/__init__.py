@@ -30,6 +30,7 @@ def pre_init(*input_args,**input_kwargs):
         'pcutoff':0.7,
         'bodyparts': ['FL_ground', 'FR_ground', 'BL_ground', 'BR_ground'],
         'defaultdir': os.getcwd(),
+        'save_files': True,
         'verbose': False,
         'palette': ['gold', 'orange', 'royalblue', 'mediumseagreen'],
         's': 10
