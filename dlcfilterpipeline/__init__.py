@@ -32,10 +32,11 @@ def pre_init(*input_args,**input_kwargs):
         'defaultdir': os.getcwd(),
         'analyze_videos': True,
         'create_videos': True,
+        'animate': False,
         'shuffle': '0',
         'save_files': True,
         'verbose': False,
-        'palette': ['gold', 'orange', 'royalblue', 'mediumseagreen'],
+        'palette': ['gold', 'red', 'cyan', 'lime'],
         's': 10
     }
 

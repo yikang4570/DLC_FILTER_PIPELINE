@@ -113,14 +113,15 @@ class Manager:
                 "dlcfilterpipeline/dlc_create_video.py",
                 self.config_path,
                 self.current_path,
-                self.shuffle])
+                self.shuffle,
+                ",".join(self.bodyparts)])
 
         # ANIMATE VIDEO PLOT
-        self.animator()
+        if self.animate: self.animator()
 
     def custom_filter(self):
         print(self.df.columns.names)
-        self.processed_df = self.df*2
+        self.processed_df = self.df
         self.plot_generator()
 
     def plot_generator(self,frame=None):
@@ -145,7 +146,7 @@ class Manager:
         df_post = df_post.sort_values(by='bodyparts', ascending=True)
 
         plotter1 = rp.scatter(df_pre[df_pre['bodyparts'].isin(self.bodyparts)],
-                              xlab='x', ylab='frame', zlab='bodyparts', colors=self.palette)
+                              xlab='x', ylab='frame', zlab='bodyparts', colors=self.palette,darkmode=True)
         plotter2 = rp.scatter(df_pre[df_pre['bodyparts'].isin(self.bodyparts)],
                               xlab='x', ylab='y', zlab='bodyparts', colors=self.palette)
         plotter3 = rp.scatter(df_post[df_post['bodyparts'].isin(self.bodyparts)],
@@ -202,7 +203,7 @@ class Manager:
         frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
         # Define the codec and create a VideoWriter object
-        out = cv2.VideoWriter(swap_ext(self.current_path,'graph_video.mp4'), cv2.VideoWriter_fourcc(*'mp4v'), fps, (frame_width, frame_height))
+        out = cv2.VideoWriter(swap_ext(self.current_path,'_graph_video.mp4'), cv2.VideoWriter_fourcc(*'mp4v'), fps, (frame_width, frame_height))
 
         frame_count = 0
         while True:
@@ -210,16 +211,13 @@ class Manager:
             if not ret:
                 break
 
-            if frame_count % 100 == 0:
-                # Generate plot data (e.g., a simple sine wave)
+            if frame_count % 5 == 0:
                 plot_image = create_plot(frame_count)
-
-                # Resize plot to fit within the frame
                 plot_height, plot_width, _ = plot_image.shape
-                frame[0:plot_height, 0:plot_width] = plot_image[:,:,:3]
-
-                # Write the frame to the output video
+                plot_image_bgr = cv2.cvtColor(plot_image, cv2.COLOR_RGB2BGR)
+                frame[0:plot_height, 0:plot_width] = plot_image_bgr
                 out.write(frame)
+
             frame_count += 1
             if frame_count % 100 == 0:
                 print(f'Processed {frame_count} frames')
