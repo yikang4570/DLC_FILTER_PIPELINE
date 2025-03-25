@@ -132,6 +132,8 @@ class Manager:
         axes[0,1].get_legend().set_visible(False)
         axes[1,1].get_legend().set_visible(False)
 
+        sub.save()
+
 
 # %% INTERNAL METHODS
     def select_initial_files(self):

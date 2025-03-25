@@ -2,6 +2,8 @@ import deeplabcut
 import os
 import sys
 import json
+import time
+from datetime import datetime
 
 config_path = sys.argv[1]
 video_path = sys.argv[2]
@@ -18,6 +20,8 @@ new_files = files_after - files_before
 
 h5_file = None
 for file in new_files:
+    if file.startswith('._'):
+        continue
     if file.endswith('.h5') and video_name in file:
         h5_file = file
         break
