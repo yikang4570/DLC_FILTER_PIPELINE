@@ -7,7 +7,7 @@ identity:
 
 
 # Project path (change when moving around)
-project_path: /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/Cropped_HiRes-Shawn-2025-03-14
+project_path: /Users/paveyboys/PycharmProjects/DLC_FILTER_PIPELINE/dlcfilterpipeline
 
 
 # Default DeepLabCut engine to use for shuffle creation (either pytorch or tensorflow)
@@ -145,6 +145,9 @@ bodyparts:
 - BL_gen
 - BR_ground
 - BR_gen
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
 
 
 # Fraction of video to start/stop when extracting frames for labeling/refinement

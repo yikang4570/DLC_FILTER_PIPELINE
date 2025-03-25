@@ -15,6 +15,8 @@ import tables
 import os
 import tkinter as tk
 from tkinter import filedialog
+import subprocess
+import json
 
 # ML functions
 from sklearn.cluster import DBSCAN
@@ -58,9 +60,20 @@ class Manager:
         self.current_path = path
 
         # ANALYZE VIDEO
-        import subprocess
-        venv_python = "/opt/anaconda3/envs/DEEPLABCUT/bin/python"
-        subprocess.run([venv_python, "dlcfilterpipeline/dlc_analyze.py"])
+        if self.analyze_videos:
+            venv_python = "/opt/anaconda3/envs/DEEPLABCUT/bin/python"
+            config_path = os.getcwd() + os.sep + "dlcfilterpipeline" + os.sep + "config.yaml"
+            subprocess.run([
+                venv_python,
+                "dlcfilterpipeline/dlc_analyze.py",
+                config_path,
+                self.current_path,
+                self.shuffle])
+
+            with open("dlcfilterpipeline" + os.sep + "model_name.json", 'r') as openfile:
+                json_object = json.load(openfile)
+                self.model_name = json_object["model_name"]
+                print("CREATED MODEL NAME IS: ",self.model_name)
 
         # MANAGE FILE NAMING CONVENTIONS TO FIND DATA
         if not hasattr(self, 'model_name'):
