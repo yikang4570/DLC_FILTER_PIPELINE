@@ -8,8 +8,10 @@ A parent class, base plotter, which initializes plotters and holds common 'self'
 # Data packages
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import readyplot as rp
 import tables
+from sklearn.cluster import DBSCAN
 
 # Directory management
 import os
@@ -121,8 +123,51 @@ class Manager:
 
     def custom_filter(self):
         print(self.df.columns.names)
-        self.processed_df = self.df
+        self.processed_df = self.df.copy()
+        idx = pd.IndexSlice
+        selected_columns = self.processed_df.loc[:, idx[:, self.bodyparts, :]]
+        Multi_X = selected_columns.to_numpy()
+
+        def cluster_a_bodypart(MX,n):
+            X = MX[:,0+n*3:2+n*3]
+            num_rows = X.shape[0]
+            new_column = (np.arange(num_rows)).reshape([X.shape[0],1])
+            X = np.concatenate((X, new_column), axis=1)
+
+            dbscan = DBSCAN(eps=5, min_samples=8)
+            clusters = dbscan.fit_predict(X)
+
+            tab20 = plt.get_cmap('tab20')
+            colors = [tab20(i) for i in np.linspace(0, 1, 20)]
+            markers = ['o', 's', 'D', '^', 'v', '<', '>', 'p', '*', 'h', 'H', 'd', 'P', 'X']
+            title_suffix = ": " + self.current_path.split(os.sep)[-1]
+
+            combined_array = np.column_stack((X[:,0],X[:,1],X[:,2], clusters))
+            tempDF = pd.DataFrame(combined_array, columns=['x','y','frame','cluster'])
+
+
+            temp_plot0 = rp.scatter(tempDF[tempDF['cluster']>-1],
+                                    xlab='x',ylab='y',zlab='cluster',title=self.bodyparts[n]+title_suffix,
+                                    colors=colors,markers=markers,legend=None,darkmode=True)
+            temp_plot1 = rp.scatter(tempDF[tempDF['cluster'] > -1],
+                                    xlab='x', ylab='frame', zlab='cluster',title=self.bodyparts[n]+title_suffix,
+                                    colors=colors,markers=markers, legend=None,darkmode=True)
+
+            sub = rp.subplots(1,2)
+            fig, axes = sub.plot(
+                temp_plot0,{'linewidth': 0, 's': self.s},
+                temp_plot1,{'linewidth': 0, 's': self.s},
+                figsize=(6, 3), dpi=200, folder_name=self.data_file_name + self.bodyparts[n] + ".png")
+            for i,ax in enumerate(axes):
+                ax.get_legend().set_visible(False)
+                ax.set_xlim(0,tempDF['x'].max())
+                #ax.set_ylim(0,tempDF['y'].max()) if i == 0 else ax.set_ylim(0,tempDF['frame'].max())
+
+        for n in range((len(self.bodyparts))):
+            cluster_a_bodypart(Multi_X,n)
+
         self.plot_generator()
+        return self.processed_df
 
     def plot_generator(self,frame=None):
         title = self.current_path.split(os.sep)[-1]
@@ -134,8 +179,6 @@ class Manager:
             xlims = (combined_df['x'].min().min(), combined_df['x'].max().max())
             ylims = (combined_df['y'].min().min(), combined_df['y'].max().max())
             tlims = (combined_df['frame'].min().min(), combined_df['frame'].max().max())
-
-            print(xlims,ylims,tlims)
 
             df_pre = df_pre[df_pre['frame'] <= frame]
             df_post = df_post[df_post['frame'] <= frame]
