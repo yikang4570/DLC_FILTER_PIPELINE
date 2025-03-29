@@ -129,12 +129,12 @@ class Manager:
         Multi_X = selected_columns.to_numpy()
 
         def cluster_a_bodypart(MX,n):
-            X = MX[:,0+n*3:2+n*3]
+            X = MX[:,0+n*3:3+n*3]
             num_rows = X.shape[0]
             new_column = (np.arange(num_rows)).reshape([X.shape[0],1])
             X = np.concatenate((X, new_column), axis=1)
 
-            dbscan = DBSCAN(eps=5, min_samples=8)
+            dbscan = DBSCAN(eps=8, min_samples=8)
             clusters = dbscan.fit_predict(X)
 
             tab20 = plt.get_cmap('tab20')
@@ -142,14 +142,14 @@ class Manager:
             markers = ['o', 's', 'D', '^', 'v', '<', '>', 'p', '*', 'h', 'H', 'd', 'P', 'X']
             title_suffix = ": " + self.current_path.split(os.sep)[-1]
 
-            combined_array = np.column_stack((X[:,0],X[:,1],X[:,2], clusters))
-            tempDF = pd.DataFrame(combined_array, columns=['x','y','frame','cluster'])
+            combined_array = np.column_stack((X[:,0],X[:,1],X[:,2],X[:,3], clusters))
+            tempDF = pd.DataFrame(combined_array, columns=['x','y','p','frame','cluster'])
 
 
-            temp_plot0 = rp.scatter(tempDF[tempDF['cluster']>-1],
+            temp_plot0 = rp.scatter(tempDF[(tempDF['cluster']>-1) & (tempDF['p']>self.pcutoff)],
                                     xlab='x',ylab='y',zlab='cluster',title=self.bodyparts[n]+title_suffix,
                                     colors=colors,markers=markers,legend=None,darkmode=True)
-            temp_plot1 = rp.scatter(tempDF[tempDF['cluster'] > -1],
+            temp_plot1 = rp.scatter(tempDF[(tempDF['cluster']>-1) & (tempDF['p']>self.pcutoff)],
                                     xlab='x', ylab='frame', zlab='cluster',title=self.bodyparts[n]+title_suffix,
                                     colors=colors,markers=markers, legend=None,darkmode=True)
 
