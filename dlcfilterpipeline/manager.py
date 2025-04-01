@@ -38,90 +38,42 @@ pd.options.mode.chained_assignment = None
 # %% INITIALIZE CLASS
 class Manager:
     def __init__(self,input_dict):
+        """Initializes the video pipeline manager. Sets class variables from input_dict, and applies necessary
+        changes to the package config.yaml for DLC to run as expected. Forces GUI video selection if none provided.
+        :param input_dict: (dict): Resolved dictionary of inputs and defaults from __init__.py"""
+
         self.input_dict = input_dict
         for name, value in input_dict.items(): setattr(self, name, value)
-
-        self.config_path = os.getcwd() + os.sep + "dlcfilterpipeline" + os.sep + "config.yaml"
-        yaml = YAML()
-        with open(self.config_path, 'r') as file: data = yaml.load(file)
-        data['pcutoff'] = self.pcutoff
-        with open(self.config_path, 'w') as file:
-            yaml.dump(data, file)
-
-        if self.verbose:
-            for name, value in self.__dict__.items(): print(f"{name}: {value}")
-
+        self.set_config_pcutoff()
         if 'video_paths' not in input_dict: self.select_initial_files()
-
         if self.verbose:
             for name, value in self.__dict__.items(): print(f"{name}: {value}")
 
 # %% MAIN METHODS
     def batch_process(self):
+        """Processes all provided videos in a loop and keeps track of completed videos in case of failure."""
         self.fully_processed_list = []
-        for path in self.video_paths:
+        for i, path in enumerate(self.video_paths):
+            print(f"Processing {path}")
             self.single_process(path)
+            print(f"Finished processing {path}")
             self.fully_processed_list.append(path)
 
     def single_process(self,path=None):
-        # INITIALIZE VIDEO PATH
-        if path is None: path = self.video_paths[0]
-        elif isinstance(path, int): path = self.video_paths[path]
-        self.current_path = path
-
-        # ANALYZE VIDEO
-        if self.analyze_videos:
-            venv_python = "/opt/anaconda3/envs/DEEPLABCUT/bin/python"
-            subprocess.run([
-                venv_python,
-                "dlcfilterpipeline/dlc_analyze.py",
-                self.config_path,
-                self.current_path,
-                self.shuffle])
-
-            with open("dlcfilterpipeline" + os.sep + "model_name.json", 'r') as openfile:
-                json_object = json.load(openfile)
-                self.model_name = json_object["model_name"]
-                print("CREATED MODEL NAME IS: ",self.model_name)
-
-        # MANAGE FILE NAMING CONVENTIONS TO FIND DATA
-        if not hasattr(self, 'model_name'):
-            self.model_name = self.get_text()
-            print(self.model_name)
-        else: print("model_name is already in the class as: ",self.model_name)
-        self.data_file_name = swap_ext(self.current_path, self.model_name)
-
-        # LOAD H5
-        try:
-            self.df = pd.read_hdf(self.data_file_name + '.h5')
-            print("HDF5 file: " + self.data_file_name + '.h5' + " successfully loaded.")
-        except Exception as e:
-            print(f"Error reading HDF5 file:" + self.data_file_name + f" ERROR: {e}")
-            return
-
-        # FILTER H5
-        if self.verbose: print("Initial DataFrame:", self.df.head())
+        """Processes a single video through the entire pipeline. User settings are applied internally to these functions to
+        determine whether they will be fully executed.
+        :param path: (string): Path of the video to be processed, if None the first video in the list is used."""
+        self.initialize_video_path(path)
+        self.dlc_analyze()
+        self.ensure_model_name()
+        self.load_h5()
         self.df_processed = self.custom_filter()
-        if self.verbose: print("Processed DataFrame:", self.df_processed.head())
-
-        # SAVE FILES
-        self.save() if self.save_files == True else print("Files not saving per user settings")
-
-        # CREATE VIDEO
-        if self.create_videos:
-            venv_python = "/opt/anaconda3/envs/DEEPLABCUT/bin/python"
-            subprocess.run([
-                venv_python,
-                "dlcfilterpipeline/dlc_create_video.py",
-                self.config_path,
-                self.current_path,
-                self.shuffle,
-                ",".join(self.bodyparts)])
-
-        # ANIMATE VIDEO PLOT
-        if self.animate: self.animator()
+        self.save()
+        self.dlc_create_videos()
+        self.animator()
 
     def custom_filter(self):
+        if self.verbose: print("Initial DataFrame:", self.df.head())
         print(self.df.columns.names)
         self.processed_df = self.df.copy()
         idx = pd.IndexSlice
@@ -167,6 +119,7 @@ class Manager:
             cluster_a_bodypart(Multi_X,n)
 
         self.plot_generator()
+        if self.verbose: print("Processed DataFrame:", self.df_processed.head())
         return self.processed_df
 
     def plot_generator(self,frame=None):
@@ -224,6 +177,8 @@ class Manager:
         return fig
 
     def animator(self):
+        if not self.animate: return
+
         import cv2
         import numpy as np
         import matplotlib.pyplot as plt
@@ -272,7 +227,17 @@ class Manager:
 
 
 # %% INTERNAL METHODS
+    def set_config_pcutoff(self):
+        """Set the pcutoff parameter in the config.yaml file to ensure DLC functions behave as expected."""
+        self.config_path = os.getcwd() + os.sep + "dlcfilterpipeline" + os.sep + "config.yaml"
+        yaml = YAML()
+        with open(self.config_path, 'r') as file: data = yaml.load(file)
+        data['pcutoff'] = self.pcutoff
+        with open(self.config_path, 'w') as file:
+            yaml.dump(data, file)
+
     def select_initial_files(self):
+        """GUI multi-file selector to determine list of videos to process if not provided programmatically."""
         root = tk.Tk()
         root.withdraw()
         self.video_paths = filedialog.askopenfilenames(
@@ -281,13 +246,63 @@ class Manager:
         root.destroy()
         return
 
+    def initialize_video_path(self,path):
+        """Parses whether path is None, int, or string, and assigns self.current_path accordingly. Uses video[0] if None.
+        :param path: (None,int,string): Path value to be parsed to determine self.current_path"""
+        if path is None:
+            print("No explicit video called for single_process(), using first video in the self.video_paths list")
+            path = self.video_paths[0]
+        elif isinstance(path, int): path = self.video_paths[path]
+        self.current_path = path
+
+    def ensure_model_name(self):
+        """Determines full name of the model from defaults or GUI user input to manage file naming conventions later."""
+        if not hasattr(self, 'model_name'): self.model_name = self.get_text()
+        else: print("model_name is already in the class as: ",self.model_name)
+        self.data_file_name = swap_ext(self.current_path, self.model_name)
+
+    def dlc_analyze(self):
+        """Runs dlc_analyze.py in a DEEPLABCUT virtual environment if user chooses, and writes the model name to json"""
+
+        # PASS IF USER DOES NOT WANT TO ANALYZE
+        if not self.analyze_videos: return
+
+        # RUN DLC_ANALYZE.PY IN THE DEEPLABCUT ENVIRONMENT
+        subprocess.run([
+            self.dlc_venv_path,
+            "dlcfilterpipeline/dlc_analyze.py",
+            self.config_path,
+            self.current_path,
+            self.shuffle])
+
+        # SAVE THE CREATED MODEL NAME TO JSON FOR FUTURE USE
+        with open("dlcfilterpipeline" + os.sep + "model_name.json", 'r') as openfile:
+            json_object = json.load(openfile)
+            self.model_name = json_object["model_name"]
+            print("CREATED MODEL NAME IS: ", self.model_name)
+
+    def load_h5(self):
+        """Loads the h5 file associated with the video as self.df (pandas dataframe)."""
+        try:
+            self.df = pd.read_hdf(self.data_file_name + '.h5')
+            print("HDF5 file: " + self.data_file_name + '.h5' + " successfully loaded.")
+        except Exception as e:
+            print(f"Error reading HDF5 file:" + self.data_file_name + f" ERROR: {e}")
+            return
+
     def simplify_df(self,df):
+        """Simplifies a multi-index data frame to be easier to work with for instance with plotting.
+        :param df: Multi-index data frame to be simplified
+        :return df_simple: regular dataframe"""
+
+        # SET UP THE COLUMN NAMES AND EXISTING BODYPARTS TO EXTRACT
         cs = ['frame', 'x', 'y', 'likelihood', 'bodyparts']
         scorer = df.columns.get_level_values(0).unique().tolist()[0]
         bodyparts = df.columns.get_level_values(1).unique().tolist()
         coords = df.columns.get_level_values(2).unique().tolist()
         df_simple = pd.DataFrame(columns=cs)
 
+        # ITERATE THROUGH DATA FRAME AND APPEND ROWS PER BODY PART TO THE SIMPLIFIED DF WITH BODY PART AS A VALUE
         for i in range(len(df)):
             tpdf = df.iloc[i]
             for bodypart in bodyparts:
@@ -297,18 +312,27 @@ class Manager:
                            tpdf.loc[(scorer, bodypart, cs[3])],
                            bodypart]
                 df_simple.loc[len(df_simple)] = new_row
+
+        # RETURN SIMPLIFIED DATAFRAME
         return df_simple
 
     def save(self):
+        """Saves output h5 and csv files and backups of original if user chooses to, required for some future steps."""
+
+        # PASS IF USER DOES NOT WANT TO SAVE
+        if not self.save_files:
+            print("Files not saving per user settings")
+            return
+
         # SAVE H5
         self.df = pd.DataFrame(self.df)
+
         try:
             self.df.to_hdf(self.data_file_name + '_backup.h5', key='df', mode='w')
             self.processed_df.to_hdf(self.data_file_name + '.h5', key='df', mode='w')
             print(f"Processed data successfully written for '{self.data_file_name}'.h5.")
         except Exception as e:
             print(f"Error writing: " + self.data_file_name + f".h5 to HDF5 file: {e}")
-            return
 
         # SAVE CSV
         try:
@@ -318,13 +342,32 @@ class Manager:
         except Exception as e:
             print(f"Error writing:" + self.data_file_name + f".csv to CSV file: {e}")
 
+    def dlc_create_videos(self):
+        """Runs dlc_create_video.py in a DEEPLABCUT virtual environment if user chooses"""
+
+        # PASS IF USER DOES NOT WANT TO CREATE VIDEOS
+        if not self.create_videos: return
+
+        # START VIRTUAL ENVIRONMENT TO RUN DLC VIDEO CREATION
+        subprocess.run([
+            self.dlc_venv_path,
+            "dlcfilterpipeline/dlc_create_video.py",
+            self.config_path,
+            self.current_path,
+            self.shuffle,
+            ",".join(self.bodyparts)])
+
     def get_text(self):
+        """GUI for user text acquisition
+        :return self.text: (string): Text entered by the user"""
+        # INITIALIZE BUTTON
         def get_text_button():
             self.text = entry.get()
             root.withdraw()
             root.update()
             root.destroy()
 
+        # TKINTER MAINLOOP WHICH CATCHES TEXT SUBMISSION
         root = tk.Tk()
         root.title("Text Prompt Example")
         entry = tk.Entry(root, width=30)

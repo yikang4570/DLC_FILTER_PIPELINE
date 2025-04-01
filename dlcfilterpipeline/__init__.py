@@ -35,6 +35,7 @@ def pre_init(*input_args,**input_kwargs):
         'animate': False,
         'shuffle': '0',
         'save_files': True,
+        'dlc_venv_path' : "/opt/anaconda3/envs/DEEPLABCUT/bin/python",
         'verbose': False,
         'palette': ['gold', 'red', 'cyan', 'lime'],
         's': 10
