@@ -27,8 +27,9 @@ from .utils import dict_update_nested
 def pre_init(*input_args,**input_kwargs):
     # INITIALIZE DEFAULT VALUES
     defaults_dict = {
-        'pcutoff':0.7,
+        'pcutoff':0.6,
         'bodyparts': ['FL_ground', 'FR_ground', 'BL_ground', 'BR_ground'],
+        'ref_bodyparts': ['Nose','Tail'], # ALWAYS NOSE TAIL ORDER, BUT CHANGE SPECIFIC TEXT IF NECESSARY
         'defaultdir': os.getcwd(),
         'analyze_videos': True,
         'create_videos': True,
@@ -38,7 +39,11 @@ def pre_init(*input_args,**input_kwargs):
         'dlc_venv_path' : "/opt/anaconda3/envs/DEEPLABCUT/bin/python",
         'verbose': False,
         'palette': ['gold', 'red', 'cyan', 'lime'],
-        's': 10
+        'cluster_markers': ['o', 's', 'D', '^', 'v', '<', '>', 'p', '*', 'h', 'H', 'd', 'P', 'X'],
+        'cluster_eps':8,
+        'cluster_min_samples':8,
+        's': 10,
+        'graph_video_frame_step' : 1
     }
 
     # START INPUT_DICT FROM SUPPLIED KWARGS

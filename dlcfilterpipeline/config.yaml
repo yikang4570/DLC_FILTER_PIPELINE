@@ -225,7 +225,7 @@ skeleton:
 - - Tail
   - BR_gen
 skeleton_color: yellow
-pcutoff: 0.7
+pcutoff: 0.6
 dotsize: 2
 alphavalue: 0.4
 colormap: rainbow

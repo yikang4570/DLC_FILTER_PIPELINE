@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import readyplot as rp
 import tables
 from sklearn.cluster import DBSCAN
+from scipy.ndimage import median_filter
 
 # Directory management
 import os
@@ -20,6 +21,8 @@ from tkinter import filedialog
 import subprocess
 import json
 from ruamel.yaml import YAML
+from pathlib import Path
+import scipy.io
 
 # ML functions
 from sklearn.cluster import DBSCAN
@@ -27,7 +30,8 @@ from sklearn.cluster import DBSCAN
 # Package utils
 from .utils import (dict_update_nested,
                     mini_kwarg_resolver,
-                    swap_ext)
+                    swap_ext,
+                    between_fill)
 
 # Package settings (error suppression)
 pd.options.mode.chained_assignment = None
@@ -45,6 +49,7 @@ class Manager:
         self.input_dict = input_dict
         for name, value in input_dict.items(): setattr(self, name, value)
         self.set_config_pcutoff()
+        self.initialize_cluster_colormap()
         if 'video_paths' not in input_dict: self.select_initial_files()
         if self.verbose:
             for name, value in self.__dict__.items(): print(f"{name}: {value}")
@@ -67,60 +72,142 @@ class Manager:
         self.dlc_analyze()
         self.ensure_model_name()
         self.load_h5()
-        self.df_processed = self.custom_filter()
+        self.custom_filter()
         self.save()
         self.dlc_create_videos()
         self.animator()
 
     def custom_filter(self):
+        Multi_X = self.initialize_processed_df_numpy()
+
+        for n in range((len(self.bodyparts))):
+            self.filter_a_limb(Multi_X,n)
+        self.filter_nose_to_tail()
+
+        self.plot_generator()
+        if self.verbose: print("Processed DataFrame:", self.df_processed.head())
+        return
+
+    def initialize_processed_df_numpy(self):
+        """Initializes processed_df, and extracts a simplified numpy array Multi_x for cluster processing
+        :return Multi_X: (np.array): Input numpy array of all tracking data"""
+
+        # PRINT INITIAL INFO
         if self.verbose: print("Initial DataFrame:", self.df.head())
         print(self.df.columns.names)
+
+        # CREATE PROCESSED_DF
         self.processed_df = self.df.copy()
+
+        # CREATE SIMPLIFIED ARRAY VERSION TO PREP CLUSTERING
         idx = pd.IndexSlice
         selected_columns = self.processed_df.loc[:, idx[:, self.bodyparts, :]]
         Multi_X = selected_columns.to_numpy()
 
-        def cluster_a_bodypart(MX,n):
-            X = MX[:,0+n*3:3+n*3]
-            num_rows = X.shape[0]
-            new_column = (np.arange(num_rows)).reshape([X.shape[0],1])
-            X = np.concatenate((X, new_column), axis=1)
+        # RETURN NEW ARRAY
+        return Multi_X
 
-            dbscan = DBSCAN(eps=8, min_samples=8)
-            clusters = dbscan.fit_predict(X)
+    def filter_a_limb(self,MX, n):
+        """Clusters limb footsteps, initializes single readyplots, and plots a layout (readyplot subplot)
+        :param MX: (np.array): Input numpy array of all tracking data
+        :param n : (int): Number of current body part"""
 
-            tab20 = plt.get_cmap('tab20')
-            colors = [tab20(i) for i in np.linspace(0, 1, 20)]
-            markers = ['o', 's', 'D', '^', 'v', '<', '>', 'p', '*', 'h', 'H', 'd', 'P', 'X']
-            title_suffix = ": " + self.current_path.split(os.sep)[-1]
+        # GET TEMPORARY DATA FRAME AND COPY THE P VALUES TO THE ORIGINAL
+        tempDF = self.extract_and_cluster_limb(MX, n)
+        self.processed_df.loc[:, (slice(None), self.bodyparts[n], 'x')] = tempDF['x']
+        self.processed_df.loc[:, (slice(None), self.bodyparts[n], 'y')] = tempDF['y']
+        self.processed_df.loc[:,(slice(None),self.bodyparts[n],'likelihood')] = tempDF['p']
 
-            combined_array = np.column_stack((X[:,0],X[:,1],X[:,2],X[:,3], clusters))
-            tempDF = pd.DataFrame(combined_array, columns=['x','y','p','frame','cluster'])
+        # CREATE PLOTS
+        temp_plot0,temp_plot1 = self.cluster_plot_singles(tempDF,n)
+        self.cluster_plot_layout(tempDF,n,temp_plot0,temp_plot1)
 
+    def filter_nose_to_tail(self):
+        def smooth_and_fill(n,k):
+            # REPLACE LOW LIKELHOOD VALUES WITH NAN
+            self.processed_df.loc[self.processed_df['likelihood']<self.pcutoff,
+                (slice(None), self.ref_bodyparts[n], k)] = np.nan
+            # FORWARD AND BACK FILL NANs WITH LAST OR FIRST MEASURED VALUES (WHEN OFF SCREEN FOR INSTANCE)
+            self.processed_df.loc[self.processed_df['likelihood'] < self.pcutoff,
+                (slice(None), self.ref_bodyparts[n], k)].ffill().bfill()
+            # MEDIAN FILTER SO ANY WIERD POSITIONS ARE TAKEN CARE OF
+            self.processed_df.loc[:, (slice(None), self.ref_bodyparts[n], k)] = median_filter(
+                self.processed_df.loc[:, (slice(None), self.ref_bodyparts[n], k)], size = 5)
 
-            temp_plot0 = rp.scatter(tempDF[(tempDF['cluster']>-1) & (tempDF['p']>self.pcutoff)],
-                                    xlab='x',ylab='y',zlab='cluster',title=self.bodyparts[n]+title_suffix,
-                                    colors=colors,markers=markers,legend=None,darkmode=True)
-            temp_plot1 = rp.scatter(tempDF[(tempDF['cluster']>-1) & (tempDF['p']>self.pcutoff)],
-                                    xlab='x', ylab='frame', zlab='cluster',title=self.bodyparts[n]+title_suffix,
-                                    colors=colors,markers=markers, legend=None,darkmode=True)
+        for n in [1,2]:
+            for k in ['x','y']:
+                smooth_and_fill(n,k)
+            # SET ALL LIKELIHOODS TO 1 TO AVOID FILTERING OUT LATER
+            self.processed_df.loc[:, (slice(None), self.ref_bodyparts[n], 'likelihood')] = 1
 
-            sub = rp.subplots(1,2)
-            fig, axes = sub.plot(
-                temp_plot0,{'linewidth': 0, 's': self.s},
-                temp_plot1,{'linewidth': 0, 's': self.s},
-                figsize=(6, 3), dpi=200, folder_name=self.data_file_name + self.bodyparts[n] + ".png")
-            for i,ax in enumerate(axes):
-                ax.get_legend().set_visible(False)
-                ax.set_xlim(0,tempDF['x'].max())
-                #ax.set_ylim(0,tempDF['y'].max()) if i == 0 else ax.set_ylim(0,tempDF['frame'].max())
+    def extract_and_cluster_limb(self, MX, n):
+        """Unpacks the numpy array by body part (indicated by n), clusters footsteps, and returns a convenient tempDF
+        :param MX: (np.array): Input numpy array of all tracking data
+        :param n: (int): Number of current body part
+        :returns: tempDF: (DataFrame): Temporary data relevant to the current body part"""
 
-        for n in range((len(self.bodyparts))):
-            cluster_a_bodypart(Multi_X,n)
+        # EXTRACT DESIRED COLUMNS FROM MX
+        X = MX[:, 0 + n * 3:3 + n * 3]
+        num_rows = X.shape[0]
+        new_column = (np.arange(num_rows)).reshape([X.shape[0], 1])
+        X = np.concatenate((X, new_column), axis=1)
 
-        self.plot_generator()
-        if self.verbose: print("Processed DataFrame:", self.df_processed.head())
-        return self.processed_df
+        # CLUSTER FOOTSTEPS
+        dbscan = DBSCAN(eps=self.cluster_eps, min_samples=self.cluster_min_samples)
+        clusters = dbscan.fit_predict(X)
+
+        # CREATE TEMPORARY DATAFRAME AND SET UN-CLUSTERED P VALUES TO 0, FILL VALUES WITHIN CLUSTERS
+        combined_array = np.column_stack((X[:, 0], X[:, 1], X[:, 2], X[:, 3], clusters))
+        tempDF = pd.DataFrame(combined_array, columns=['x', 'y', 'p', 'frame', 'cluster'])
+
+        tempDF = between_fill(tempDF,'cluster')
+        for cluster in tempDF['cluster'].unique():
+            temp_mean = tempDF[tempDF['cluster'] == cluster]['p'].mean()
+            tempDF[tempDF['cluster'] == cluster]['p'] = temp_mean
+            tempDF[tempDF['cluster'] == cluster]['x'] = median_filter(tempDF[tempDF['cluster'] == cluster]['x'],size=5)
+            tempDF[tempDF['cluster'] == cluster]['y'] = median_filter(tempDF[tempDF['cluster'] == cluster]['y'],size=5)
+        tempDF.loc[tempDF['cluster'] == -1,'p'] = 0
+
+        # RETURN SUBSET ARRAY, CLUSTERS, AND EDITED TEMPDF
+        return tempDF
+
+    def cluster_plot_singles(self, tempDF,n, ylabs = ['y','frame']):
+        """Loops through provided ylabs to create cluster plots
+        :param tempDF: (DataFrame): Dataframe containing columns 'x', 'y', 'p', and 'frame'
+        :param n: (int): Current bodypart number
+        :param ylabs: (list of strings): List of ylab names for plotting
+        :return: temp_plots.values(): (list): readyplot objects to use in subplots later, unpack with rp0, rp1 = fnc()"""
+
+        # FILTER TEMPDF BY PCUTOFF FOR PLOTTING, INITIALIZE OUTPUT DICT
+        plotDF = tempDF[tempDF['p'] > self.pcutoff]
+        temp_plots = {}
+
+        # KWARGS FOR READYPLOT, MOSTLY ESTHETICS BUT ALSO TITLE AND AVOIDING ERRORS WITH MARKER INPUT
+        cluster_ptk = {'title':self.bodyparts[n] + ": " + self.current_path.split(os.sep)[-1],
+            'colors':self.cluster_colors, 'markers':self.cluster_markers, 'legend':None, 'darkmode':True}
+
+        # ITERATIVELY INITIALIZE READYPLOT OBJECTS AND RETURN AN UNPACKABLE LIST OF THEM
+        for ylab in ylabs: temp_plots[ylab] = rp.scatter(plotDF, xlab='x', ylab=ylab, zlab='cluster',**cluster_ptk)
+        return temp_plots.values()
+
+    def cluster_plot_layout(self,tempDF,n,temp_plot0,temp_plot1):
+        # ARRANGE SUBPLOTS AND APPLY EXTRA SETTINGS
+        sub = rp.subplots(1, 2)
+        fig, axes = sub.plot(
+            temp_plot0, {'linewidth': 0, 's': self.s},
+            temp_plot1, {'linewidth': 0, 's': self.s},
+            figsize=(6, 3), dpi=200, folder_name=self.data_file_name + self.bodyparts[n] + ".png", save=False)
+        for i, ax in enumerate(axes):
+            ax.get_legend().set_visible(False)
+            ax.set_xlim(0, tempDF['x'].max())
+            # ax.set_ylim(0,tempDF['y'].max()) if i == 0 else ax.set_ylim(0,tempDF['frame'].max())
+        sub.save()
+
+    def initialize_cluster_colormap(self):
+        """Provides a large (n=20) colormap for cluster footstep plotting unless colors have already been provided."""
+        if hasattr(self, 'cluster_colors'): return
+        tab20 = plt.get_cmap('tab20')
+        self.cluster_colors = [tab20(i) for i in np.linspace(0, 1, 20)]
 
     def plot_generator(self,frame=None):
         title = self.current_path.split(os.sep)[-1]
@@ -209,15 +296,15 @@ class Manager:
             if not ret:
                 break
 
-            if frame_count % 5 == 0:
+            if frame_count % self.graph_video_frame_step == 0:
                 plot_image = create_plot(frame_count)
                 plot_height, plot_width, _ = plot_image.shape
                 plot_image_bgr = cv2.cvtColor(plot_image, cv2.COLOR_RGB2BGR)
-                frame[0:plot_height, 0:plot_width] = plot_image_bgr
+                frame[0:plot_height, int((frame_width-plot_width)/2):int((frame_width-plot_width)/2)+plot_width] = plot_image_bgr
                 out.write(frame)
 
             frame_count += 1
-            if frame_count % 100 == 0:
+            if frame_count % 10 == 0:
                 print(f'Processed {frame_count} frames')
 
         # Release resources
@@ -293,7 +380,7 @@ class Manager:
     def simplify_df(self,df):
         """Simplifies a multi-index data frame to be easier to work with for instance with plotting.
         :param df: Multi-index data frame to be simplified
-        :return df_simple: regular dataframe"""
+        :return: df_simple: regular dataframe"""
 
         # SET UP THE COLUMN NAMES AND EXISTING BODYPARTS TO EXTRACT
         cs = ['frame', 'x', 'y', 'likelihood', 'bodyparts']
@@ -324,11 +411,17 @@ class Manager:
             print("Files not saving per user settings")
             return
 
+        # SAVE DIRECTORY
+        directory, backup_filename = os.path.split(self.data_file_name)
+        backup_directory = directory + os.sep + 'BACKUPS'
+        os.makedirs(backup_directory, exist_ok=True)
+        backup_filepath = str(os.path.join(backup_directory, backup_filename))
+
         # SAVE H5
         self.df = pd.DataFrame(self.df)
 
         try:
-            self.df.to_hdf(self.data_file_name + '_backup.h5', key='df', mode='w')
+            self.df.to_hdf(backup_filepath + '.h5', key='df', mode='w')
             self.processed_df.to_hdf(self.data_file_name + '.h5', key='df', mode='w')
             print(f"Processed data successfully written for '{self.data_file_name}'.h5.")
         except Exception as e:
@@ -336,7 +429,7 @@ class Manager:
 
         # SAVE CSV
         try:
-            self.df.to_csv(self.data_file_name + '_backup.csv', index=True)
+            self.df.to_csv(backup_filepath + '.csv', index=True)
             self.processed_df.to_csv(self.data_file_name + '.csv', index=True)
             print(f"Processed data successfully saved as CSV to '{self.data_file_name}'.csv.")
         except Exception as e:
@@ -377,3 +470,20 @@ class Manager:
         root.mainloop()
         return self.text
 
+    def save_to_mat(self,centroid_array,nose_array,AGATHA_array):
+        arr = np.array([[7, 8, 9], [7, 8, 9]])
+        centroid_array,nose_array,AGATHA_array = arr,arr,arr
+
+        nested_dict = {
+            'DATA': {
+                'Velocity': {
+                    'BottomCentroidVelocity': centroid_array,
+                    'BottomNoseVelocity': nose_array,
+                    'TopCentroidVelocity': centroid_array,
+                    'TopNoseVelocity': nose_array
+                },
+                'AGATHA': AGATHA_array
+            }
+        }
+
+        scipy.io.savemat(self.data_file_name + '_DATA.mat', nested_dict)
