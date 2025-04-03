@@ -124,17 +124,17 @@ class Manager:
 
     def filter_nose_to_tail(self):
         def smooth_and_fill(n,k):
-            # REPLACE LOW LIKELHOOD VALUES WITH NAN
-            self.processed_df.loc[self.processed_df['likelihood']<self.pcutoff,
-                (slice(None), self.ref_bodyparts[n], k)] = np.nan
-            # FORWARD AND BACK FILL NANs WITH LAST OR FIRST MEASURED VALUES (WHEN OFF SCREEN FOR INSTANCE)
-            self.processed_df.loc[self.processed_df['likelihood'] < self.pcutoff,
-                (slice(None), self.ref_bodyparts[n], k)].ffill().bfill()
-            # MEDIAN FILTER SO ANY WIERD POSITIONS ARE TAKEN CARE OF
-            self.processed_df.loc[:, (slice(None), self.ref_bodyparts[n], k)] = median_filter(
-                self.processed_df.loc[:, (slice(None), self.ref_bodyparts[n], k)], size = 5)
+            mask_constructor = self.processed_df.loc[:,(slice(None),self.ref_bodyparts[n],'likelihood')]<self.pcutoff
+            mask = mask_constructor.to_numpy().ravel()
+            tuple_indx = (slice(None), self.ref_bodyparts[n], k)
 
-        for n in [1,2]:
+            self.processed_df.loc[mask,tuple_indx] = np.nan
+            self.processed_df.loc[:,tuple_indx] = self.processed_df.loc[:,tuple_indx].ffill().bfill()
+
+            self.processed_df.loc[:, tuple_indx] = median_filter(
+                self.processed_df.loc[:, tuple_indx], size = 5)
+
+        for n in [0,1]:
             for k in ['x','y']:
                 smooth_and_fill(n,k)
             # SET ALL LIKELIHOODS TO 1 TO AVOID FILTERING OUT LATER
