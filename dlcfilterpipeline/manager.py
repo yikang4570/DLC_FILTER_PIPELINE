@@ -31,7 +31,8 @@ from sklearn.cluster import DBSCAN
 from .utils import (dict_update_nested,
                     mini_kwarg_resolver,
                     swap_ext,
-                    between_fill)
+                    between_fill,
+                    trim_df_by_x)
 
 # Package settings (error suppression)
 pd.options.mode.chained_assignment = None
@@ -139,6 +140,7 @@ class Manager:
                 smooth_and_fill(n,k)
             # SET ALL LIKELIHOODS TO 1 TO AVOID FILTERING OUT LATER
             self.processed_df.loc[:, (slice(None), self.ref_bodyparts[n], 'likelihood')] = 1
+            self.nose_tail_plot(n)
 
     def extract_and_cluster_limb(self, MX, n):
         """Unpacks the numpy array by body part (indicated by n), clusters footsteps, and returns a convenient tempDF
@@ -160,16 +162,22 @@ class Manager:
         combined_array = np.column_stack((X[:, 0], X[:, 1], X[:, 2], X[:, 3], clusters))
         tempDF = pd.DataFrame(combined_array, columns=['x', 'y', 'p', 'frame', 'cluster'])
 
+        average_cluster_size = len(tempDF)/len(tempDF['cluster'].unique())
+        cluster_trim = int(average_cluster_size * 0.01* self.cluster_trim_percent)
+        print("Cluster trimmed by the following at beginning and end:", cluster_trim)
+
         tempDF = between_fill(tempDF,'cluster')
         for cluster in tempDF['cluster'].unique():
             temp_mean = tempDF[tempDF['cluster'] == cluster]['p'].mean()
             tempDF[tempDF['cluster'] == cluster]['p'] = temp_mean
+            trimmed_list = trim_df_by_x(tempDF[tempDF['cluster'] == cluster]['p'].to_list(),cluster_trim)
+            tempDF.loc[tempDF['cluster'] == cluster,'p'] = trimmed_list
             tempDF[tempDF['cluster'] == cluster]['x'] = median_filter(tempDF[tempDF['cluster'] == cluster]['x'],size=5)
             tempDF[tempDF['cluster'] == cluster]['y'] = median_filter(tempDF[tempDF['cluster'] == cluster]['y'],size=5)
         tempDF.loc[tempDF['cluster'] == -1,'p'] = 0
 
         # RETURN SUBSET ARRAY, CLUSTERS, AND EDITED TEMPDF
-        return tempDF
+        return tempDF.astype('float64')
 
     def cluster_plot_singles(self, tempDF,n, ylabs = ['y','frame']):
         """Loops through provided ylabs to create cluster plots
@@ -208,6 +216,37 @@ class Manager:
         if hasattr(self, 'cluster_colors'): return
         tab20 = plt.get_cmap('tab20')
         self.cluster_colors = [tab20(i) for i in np.linspace(0, 1, 20)]
+
+    def nose_tail_plot(self,n):
+        extra_plot_kwargs = {'title': self.ref_bodyparts[n] + ": " + self.current_path.split(os.sep)[-1],
+                       'colors': self.cluster_colors, 'markers': self.cluster_markers, 'legend': None, 'darkmode': True}
+
+        prex = self.df.loc[:, (slice(None), self.ref_bodyparts[n], 'x')].to_numpy().ravel()
+        postx = self.processed_df.loc[:, (slice(None), self.ref_bodyparts[n], 'x')].to_numpy().ravel()
+        prey = self.df.loc[:, (slice(None), self.ref_bodyparts[n], 'y')].to_numpy().ravel()
+        posty = self.processed_df.loc[:, (slice(None), self.ref_bodyparts[n], 'y')].to_numpy().ravel()
+        pret = self.df.index.tolist()
+        postt = self.processed_df.index.tolist()
+
+        extra_plot_kwargs['title'] = extra_plot_kwargs['title'] + '_pre'
+        plot0 = rp.scatter(prex,prey, xlab='x', ylab='y', zlab='cluster', **extra_plot_kwargs)
+        plot1 = rp.scatter(prex,pret, xlab='x', ylab='t', zlab='cluster', **extra_plot_kwargs)
+        extra_plot_kwargs['title'] = extra_plot_kwargs['title'][:-4] + '_post'
+        plot2 = rp.scatter(postx,posty, xlab='x', ylab='y', zlab='cluster', **extra_plot_kwargs)
+        plot3 = rp.scatter(postx,postt, xlab='x', ylab='t', zlab='cluster', **extra_plot_kwargs)
+
+        sub = rp.subplots(2, 2)
+        fig, axes = sub.plot(
+            plot0, {'linewidth': 0, 's': self.s},
+            plot1, {'linewidth': 0, 's': self.s},
+            plot2, {'linewidth': 0, 's': self.s},
+            plot3, {'linewidth': 0, 's': self.s},
+            figsize=(6, 3), dpi=200, folder_name=self.data_file_name + self.ref_bodyparts[n] + ".png", save=False)
+
+        for i in range(2):
+            for j in range(2): axes[i,j].get_legend().set_visible(False)
+
+        sub.save()
 
     def plot_generator(self,frame=None):
         title = self.current_path.split(os.sep)[-1]
@@ -442,13 +481,16 @@ class Manager:
         if not self.create_videos: return
 
         # START VIRTUAL ENVIRONMENT TO RUN DLC VIDEO CREATION
+        label_list = self.bodyparts.copy()
+        label_list.extend(self.ref_bodyparts)
+        print("Creating labeled videos of bodyparts: ", label_list)
         subprocess.run([
             self.dlc_venv_path,
             "dlcfilterpipeline/dlc_create_video.py",
             self.config_path,
             self.current_path,
             self.shuffle,
-            ",".join(self.bodyparts)])
+            ",".join(label_list)])
 
     def get_text(self):
         """GUI for user text acquisition

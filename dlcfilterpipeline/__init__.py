@@ -42,6 +42,7 @@ def pre_init(*input_args,**input_kwargs):
         'cluster_markers': ['o', 's', 'D', '^', 'v', '<', '>', 'p', '*', 'h', 'H', 'd', 'P', 'X'],
         'cluster_eps':8,
         'cluster_min_samples':8,
+        'cluster_trim_percent':5,
         's': 10,
         'graph_video_frame_step' : 1
     }

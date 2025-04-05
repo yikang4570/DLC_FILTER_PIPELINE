@@ -48,3 +48,10 @@ def between_fill(df,col_name):
     df[col_name] = result
     return df
 
+
+def trim_df_by_x(lst, x):
+    num_elements_to_zero = min(x, len(lst))
+    lst[:num_elements_to_zero] = [0] * num_elements_to_zero
+    lst[-num_elements_to_zero:] = [0] * num_elements_to_zero
+    return lst
+
