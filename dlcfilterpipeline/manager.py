@@ -117,7 +117,7 @@ class Manager:
         tempDF = self.extract_and_cluster_limb(MX, n)
         self.processed_df.loc[:, (slice(None), self.bodyparts[n], 'x')] = tempDF['x']
         self.processed_df.loc[:, (slice(None), self.bodyparts[n], 'y')] = tempDF['y']
-        self.processed_df.loc[:,(slice(None),self.bodyparts[n],'likelihood')] = tempDF['p']
+        self.processed_df.loc[:, (slice(None), self.bodyparts[n], 'likelihood')] = tempDF['p']
 
         # CREATE PLOTS
         temp_plot0,temp_plot1 = self.cluster_plot_singles(tempDF,n)
@@ -162,22 +162,36 @@ class Manager:
         combined_array = np.column_stack((X[:, 0], X[:, 1], X[:, 2], X[:, 3], clusters))
         tempDF = pd.DataFrame(combined_array, columns=['x', 'y', 'p', 'frame', 'cluster'])
 
+        tempDF.loc[tempDF['p'] <= self.pcutoff,'cluster'] = -1
+        minFrame,maxFrame = tempDF['frame'].min(), tempDF['frame'].max()
         average_cluster_size = len(tempDF)/len(tempDF['cluster'].unique())
-        cluster_trim = int(average_cluster_size * 0.01* self.cluster_trim_percent)
+        cluster_trim = int(average_cluster_size * 0.01 * self.cluster_trim_percent)
+        cluster_exclude = int(average_cluster_size * 0.01 * self.cluster_exclusion_percent)
         print("Cluster trimmed by the following at beginning and end:", cluster_trim)
 
         tempDF = between_fill(tempDF,'cluster')
         for cluster in tempDF['cluster'].unique():
-            temp_mean = tempDF[tempDF['cluster'] == cluster]['p'].mean()
-            tempDF[tempDF['cluster'] == cluster]['p'] = temp_mean
-            trimmed_list = trim_df_by_x(tempDF[tempDF['cluster'] == cluster]['p'].to_list(),cluster_trim)
-            tempDF.loc[tempDF['cluster'] == cluster,'p'] = trimmed_list
-            tempDF[tempDF['cluster'] == cluster]['x'] = median_filter(tempDF[tempDF['cluster'] == cluster]['x'],size=5)
-            tempDF[tempDF['cluster'] == cluster]['y'] = median_filter(tempDF[tempDF['cluster'] == cluster]['y'],size=5)
-        tempDF.loc[tempDF['cluster'] == -1,'p'] = 0
+            print('Processing ' + self.bodyparts[n] + ' cluster #:' + str(cluster),
+                'Length of cluster: ' + str(len(tempDF[tempDF['cluster'] == cluster])),
+                  'Excluding if less than: ' + str(cluster_exclude))
+            if len(tempDF[tempDF['cluster'] == cluster]) < cluster_exclude:
+                tempDF.loc[tempDF['cluster'] == cluster,'cluster'] = -1
+                print('Excluded cluster #: ' + str(cluster) + ' because it was under cluster_exclusion_percent for foot')
+            elif tempDF.loc[tempDF['cluster'] == cluster,'frame'].isin([minFrame,maxFrame]).any() :
+                tempDF.loc[tempDF['cluster'] == cluster, 'cluster'] = -1
+                print('Excluded cluster #: ' + str(cluster) + ' because it borders beginning or end of movie')
+            else:
+                temp_mean = tempDF[tempDF['cluster'] == cluster]['p'].mean()
+                tempDF.loc[tempDF['cluster'] == cluster,'p'] = temp_mean
+                trimmed_list = trim_df_by_x(tempDF[tempDF['cluster'] == cluster]['p'].to_list(),cluster_trim)
+                tempDF.loc[tempDF['cluster'] == cluster,'p'] = trimmed_list
+                tempDF.loc[tempDF['cluster'] == cluster,'x'] = median_filter(tempDF.loc[tempDF['cluster'] == cluster,'x'],size=5)
+                tempDF.loc[tempDF['cluster'] == cluster,'y'] = median_filter(tempDF.loc[tempDF['cluster'] == cluster,'y'],size=5)
+
+        tempDF.loc[tempDF['cluster'] == -1,'p'] = 0.0
 
         # RETURN SUBSET ARRAY, CLUSTERS, AND EDITED TEMPDF
-        return tempDF.astype('float64')
+        return tempDF.astype('float32')
 
     def cluster_plot_singles(self, tempDF,n, ylabs = ['y','frame']):
         """Loops through provided ylabs to create cluster plots
