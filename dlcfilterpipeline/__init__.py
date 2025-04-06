@@ -28,7 +28,7 @@ def pre_init(*input_args,**input_kwargs):
     # INITIALIZE DEFAULT VALUES
     defaults_dict = {
         'pcutoff':0.6,
-        'bodyparts': ['FL_ground', 'FR_ground', 'BL_ground', 'BR_ground'],
+        'bodyparts': ['FL_ground', 'FR_ground', 'BL_ground', 'BR_ground'], # ALWAYS KEEP THIS ORDER BUT CHANGE NAME IF NEEDED
         'ref_bodyparts': ['Nose','Tail'], # ALWAYS NOSE TAIL ORDER, BUT CHANGE SPECIFIC TEXT IF NECESSARY
         'defaultdir': os.getcwd(),
         'analyze_videos': True,

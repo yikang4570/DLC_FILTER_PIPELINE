@@ -77,6 +77,8 @@ class Manager:
         self.save()
         self.dlc_create_videos()
         self.animator()
+        self.create_AGATHA_arrays()
+        self.save_to_mat()
 
     def custom_filter(self):
         Multi_X = self.initialize_processed_df_numpy()
@@ -526,19 +528,66 @@ class Manager:
         root.mainloop()
         return self.text
 
-    def save_to_mat(self,centroid_array,nose_array,AGATHA_array):
-        arr = np.array([[7, 8, 9], [7, 8, 9]])
-        centroid_array,nose_array,AGATHA_array = arr,arr,arr
+    def create_AGATHA_arrays(self):
+        self.nose_array = np.array([
+            self.processed_df.loc[:, (slice(None), self.ref_bodyparts[0], 'x')].to_numpy().ravel(),
+            self.processed_df.loc[:, (slice(None), self.ref_bodyparts[0], 'y')].to_numpy().ravel()]).T
 
+        self.tail_array = np.array([
+            self.processed_df.loc[:, (slice(None), self.ref_bodyparts[1], 'x')].to_numpy().ravel(),
+            self.processed_df.loc[:, (slice(None), self.ref_bodyparts[1], 'y')].to_numpy().ravel()]).T
+        self.centroid_array = (self.nose_array + self.tail_array)/2
+
+        self.AGATHA_rows = []
+        for bodypart in self.bodyparts: self.isolate_footstrikes(bodypart)
+        self.AGATHA_array = np.array(self.AGATHA_rows)
+        self.AGATHA_array = self.AGATHA_array[self.AGATHA_array[:, 3].argsort()]
+        for i in range(self.AGATHA_array.shape[0]): self.AGATHA_array[i][0] = i+1
+
+    def isolate_footstrikes(self,bp):
+        x = self.processed_df.loc[:, (slice(None), bp, 'x')].to_numpy().ravel()
+        y = self.processed_df.loc[:, (slice(None), bp, 'y')].to_numpy().ravel()
+        p = self.processed_df.loc[:, (slice(None), bp, 'likelihood')].to_numpy().ravel()
+
+        i,start_indices,end_indices = 1,[],[]
+
+        while i < len(p):
+            if p[i] != 0 and p[i-1] == 0: start_indices.append(i)
+            elif p[i] == 0 and p[i-1] != 0: end_indices.append(i)
+            i += 1
+
+        fore_or_hind = 1 if 'F' in bp else 0
+        left_or_right = 1 if 'L' in bp else 0
+        mouse_dir = 1 if x[-1] < x[0] else 0
+
+        for i in range(len(start_indices)):
+            AGATHA_row = [0,# Temporary Step Number, filter later by T, start at 1
+                          fore_or_hind,# Fore or Hind
+                          int(x[start_indices[i]]),# X Foot-strike
+                          start_indices[i],# T Foot-strike
+                          int(x[end_indices[i]]),# X Toe-off
+                          end_indices[i],# T Toe-off
+                          np.average(np.array(x[start_indices[i]:end_indices[i]])),# X Centroid
+                          int(start_indices[i] + end_indices[i])/2,# T Centroid
+                          left_or_right,# Left or Right
+                          x[start_indices[i]],# X Foot-strike
+                          y[start_indices[i]],# Y Foot-strike
+                          mouse_dir]# Mouse Dir
+
+            self.AGATHA_rows.append(AGATHA_row)
+
+        return
+
+    def save_to_mat(self):
         nested_dict = {
             'DATA': {
                 'Velocity': {
-                    'BottomCentroidVelocity': centroid_array,
-                    'BottomNoseVelocity': nose_array,
-                    'TopCentroidVelocity': centroid_array,
-                    'TopNoseVelocity': nose_array
+                    'BottomCentroidVelocity': self.centroid_array,
+                    'BottomNoseVelocity': self.nose_array,
+                    'TopCentroidVelocity': self.centroid_array,
+                    'TopNoseVelocity': self.nose_array
                 },
-                'AGATHA': AGATHA_array
+                'AGATHA': self.AGATHA_array
             }
         }
 
