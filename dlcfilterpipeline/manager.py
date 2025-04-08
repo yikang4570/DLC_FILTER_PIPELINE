@@ -69,6 +69,7 @@ class Manager:
         """Processes a single video through the entire pipeline. User settings are applied internally to these functions to
         determine whether they will be fully executed.
         :param path: (string): Path of the video to be processed, if None the first video in the list is used."""
+        plt.close('all')
         self.initialize_video_path(path)
         self.dlc_analyze()
         self.ensure_model_name()
@@ -216,11 +217,15 @@ class Manager:
 
     def cluster_plot_layout(self,tempDF,n,temp_plot0,temp_plot1):
         # ARRANGE SUBPLOTS AND APPLY EXTRA SETTINGS
+        self.output_directory = self.create_analyzed_directory()
+        filename = self.current_path.split(os.sep)[-1] + self.bodyparts[n] + ".png"
+        filepath = str(os.path.join(self.output_directory, filename))
+
         sub = rp.subplots(1, 2)
         fig, axes = sub.plot(
             temp_plot0, {'linewidth': 0, 's': self.s},
             temp_plot1, {'linewidth': 0, 's': self.s},
-            figsize=(6, 3), dpi=200, folder_name=self.data_file_name + self.bodyparts[n] + ".png", save=False)
+            figsize=(6, 3), dpi=200, folder_name=filepath, save=False)
         for i, ax in enumerate(axes):
             ax.get_legend().set_visible(False)
             ax.set_xlim(0, tempDF['x'].max())
@@ -251,13 +256,17 @@ class Manager:
         plot2 = rp.scatter(postx,posty, xlab='x', ylab='y', zlab='cluster', **extra_plot_kwargs)
         plot3 = rp.scatter(postx,postt, xlab='x', ylab='t', zlab='cluster', **extra_plot_kwargs)
 
+        self.output_directory = self.create_analyzed_directory()
+        filename = self.current_path.split(os.sep)[-1] + self.ref_bodyparts[n] + ".png"
+        filepath = str(os.path.join(self.output_directory,filename))
+
         sub = rp.subplots(2, 2)
         fig, axes = sub.plot(
             plot0, {'linewidth': 0, 's': self.s},
             plot1, {'linewidth': 0, 's': self.s},
             plot2, {'linewidth': 0, 's': self.s},
             plot3, {'linewidth': 0, 's': self.s},
-            figsize=(6, 3), dpi=200, folder_name=self.data_file_name + self.ref_bodyparts[n] + ".png", save=False)
+            figsize=(6, 3), dpi=200, folder_name=filepath, save=False)
 
         for i in range(2):
             for j in range(2): axes[i,j].get_legend().set_visible(False)
@@ -295,11 +304,14 @@ class Manager:
         if frame is None:sub = rp.subplots(2, 2)
         else: sub = rp.subplots(1,4)
 
+        self.output_directory = self.create_analyzed_directory()
+        filepath = str(os.path.join(self.output_directory, title+ "_SUB.png"))
+
         fig, axes = sub.plot(plotter1, {'title': title + " pre-filtered", 'linewidth': 0, 's': self.s},
                              plotter2, {'title': title + " pre-filtered", 'linewidth': 0, 's': self.s},
                              plotter3, {'title': title + " post-filtered", 'linewidth': 0, 's': self.s},
                              plotter4, {'title': title + " post-filtered", 'linewidth': 0, 's': self.s},
-                             figsize=(6, 5), dpi=200, folder_name=self.data_file_name + "_SUB.png")
+                             figsize=(6, 5), dpi=200, folder_name=filepath)
 
         if frame is None:
             axes[0,1].get_legend().set_visible(False)
@@ -467,10 +479,10 @@ class Manager:
             return
 
         # SAVE DIRECTORY
-        directory, backup_filename = os.path.split(self.data_file_name)
+        directory, filename = os.path.split(self.data_file_name)
         backup_directory = directory + os.sep + 'BACKUPS'
         os.makedirs(backup_directory, exist_ok=True)
-        backup_filepath = str(os.path.join(backup_directory, backup_filename))
+        backup_filepath = str(os.path.join(backup_directory, filename))
 
         # SAVE H5
         self.df = pd.DataFrame(self.df)
@@ -590,5 +602,28 @@ class Manager:
                 'AGATHA': self.AGATHA_array
             }
         }
+        directory, matlab_filename = os.path.split(self.data_file_name)
+        matlab_filename = matlab_filename.split(self.model_name, 1)[0] + '_DATA.mat'
+        self.output_directory = self.create_analyzed_directory()
+        matlab_filepath = str(os.path.join(self.output_directory, matlab_filename))
+        print("Saving data to matlab file: ", matlab_filepath)
+        scipy.io.savemat(matlab_filepath, nested_dict)
 
-        scipy.io.savemat(self.data_file_name + '_DATA.mat', nested_dict)
+    def create_analyzed_directory(self):
+        if hasattr(self, 'output_directory'):return self.output_directory
+        else:
+            directory, matlab_filename = os.path.split(self.data_file_name)
+            split_dir = directory.split(os.sep)
+            print(split_dir)
+
+            if split_dir[-1] == 'AVI':
+                outer_folder_name = split_dir[-2]
+                new_dir_list = split_dir[:-2]
+                new_dir_list.append(outer_folder_name + 'analyzed')
+                matlab_directory = ''
+                for element in new_dir_list: matlab_directory += os.sep + element
+            else:
+                matlab_directory = directory + os.sep + 'analyzed'
+
+            os.makedirs(matlab_directory, exist_ok=True)
+            return matlab_directory
