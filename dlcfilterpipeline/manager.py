@@ -488,7 +488,7 @@ class Manager:
         self.df = pd.DataFrame(self.df)
 
         try:
-            self.df.to_hdf(backup_filepath + '.h5', key='df', mode='w')
+            if not os.path.exists(backup_filepath + '.h5'): self.df.to_hdf(backup_filepath + '.h5', key='df', mode='w')
             self.processed_df.to_hdf(self.data_file_name + '.h5', key='df', mode='w')
             print(f"Processed data successfully written for '{self.data_file_name}'.h5.")
         except Exception as e:
@@ -496,7 +496,7 @@ class Manager:
 
         # SAVE CSV
         try:
-            self.df.to_csv(backup_filepath + '.csv', index=True)
+            if not os.path.exists(backup_filepath + '.csv'): self.df.to_csv(backup_filepath + '.csv', index=True)
             self.processed_df.to_csv(self.data_file_name + '.csv', index=True)
             print(f"Processed data successfully saved as CSV to '{self.data_file_name}'.csv.")
         except Exception as e:
