@@ -9,6 +9,7 @@ import os
 import tkinter as tk
 import numpy as np
 import pandas as pd
+from scipy.ndimage import median_filter
 
 # %% FUNCTIONS
 def mini_kwarg_resolver(key,def_val,kwargs):
@@ -50,8 +51,22 @@ def between_fill(df,col_name):
 
 
 def trim_df_by_x(lst, x):
-    num_elements_to_zero = min(x, len(lst))
-    lst[:num_elements_to_zero] = [0] * num_elements_to_zero
-    lst[-num_elements_to_zero:] = [0] * num_elements_to_zero
+    if x > 0:
+        num_elements_to_zero = min(x, len(lst))
+        lst[:num_elements_to_zero] = [0] * num_elements_to_zero
+        lst[-num_elements_to_zero:] = [0] * num_elements_to_zero
+    else:
+        pass
     return lst
+
+def d_dt(x):
+    dx_dt = median_filter(x.copy(),size=5)
+    for i in range(len (x)):
+        if i == 0:
+            dx_dt[i] = (x[1]+x[2]-2*x[0])/2
+        elif i == len(x)-1:
+            dx_dt[i] = (2*x[-1]-x[-2]-x[-3])/2
+        else:
+            dx_dt[i] = ((x[i+1]-x[i]) + (x[i]-x[i-1]))/2
+    return dx_dt
 

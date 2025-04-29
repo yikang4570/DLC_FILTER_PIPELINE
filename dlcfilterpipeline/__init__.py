@@ -40,12 +40,17 @@ def pre_init(*input_args,**input_kwargs):
         'verbose': False,
         'palette': ['gold', 'red', 'cyan', 'lime'],
         'cluster_markers': ['o', 's', 'D', '^', 'v', '<', '>', 'p', '*', 'h', 'H', 'd', 'P', 'X'],
-        'cluster_eps':8,
-        'cluster_min_samples':8,
-        'cluster_trim_percent':5,
+        'cluster_pcutoff_eps':8,
+        'cluster_pcutoff_min_samples':8,
+        'cluster_pcutoff_trim_percent': 5,
+        'cluster_position_eps': 8,
+        'cluster_position_min_samples': 5,
+        'cluster_position_trim_percent': 1,
         'cluster_exclusion_percent': 33,
         's': 10,
-        'graph_video_frame_step' : 1
+        'graph_video_frame_step' : 1,
+        'footstrike_algorithm':'position', #use 'pcutoff' for alternative
+        'cluster_weights':[5,1,1,1,1,1] #x,y,p,t,dxdt,dydt
     }
 
     # START INPUT_DICT FROM SUPPLIED KWARGS

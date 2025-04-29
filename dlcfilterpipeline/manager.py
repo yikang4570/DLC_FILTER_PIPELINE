@@ -16,8 +16,8 @@ from scipy.ndimage import median_filter
 
 # Directory management
 import os
-import tkinter as tk
-from tkinter import filedialog
+# import tkinter as tk
+# from tkinter import filedialog
 import subprocess
 import json
 from ruamel.yaml import YAML
@@ -32,7 +32,8 @@ from .utils import (dict_update_nested,
                     mini_kwarg_resolver,
                     swap_ext,
                     between_fill,
-                    trim_df_by_x)
+                    trim_df_by_x,
+                    d_dt)
 
 # Package settings (error suppression)
 pd.options.mode.chained_assignment = None
@@ -117,7 +118,9 @@ class Manager:
         :param n : (int): Number of current body part"""
 
         # GET TEMPORARY DATA FRAME AND COPY THE P VALUES TO THE ORIGINAL
-        tempDF = self.extract_and_cluster_limb(MX, n)
+        tempDF = self.filter_and_cluster_limb(MX, n)
+
+        # POPULATE DATA FRAME FROM FILTERED TEMPORARY ONE
         self.processed_df.loc[:, (slice(None), self.bodyparts[n], 'x')] = tempDF['x']
         self.processed_df.loc[:, (slice(None), self.bodyparts[n], 'y')] = tempDF['y']
         self.processed_df.loc[:, (slice(None), self.bodyparts[n], 'likelihood')] = tempDF['p']
@@ -145,7 +148,75 @@ class Manager:
             self.processed_df.loc[:, (slice(None), self.ref_bodyparts[n], 'likelihood')] = 1
             self.nose_tail_plot(n)
 
-    def extract_and_cluster_limb(self, MX, n):
+    def filter_and_cluster_limb(self,MX, n):
+        """Unpacks the numpy array by body part (indicated by n), clusters footsteps, and returns a convenient tempDF
+                :param MX: (np.array): Input numpy array of all tracking data
+                :param n: (int): Number of current body part
+                :returns: tempDF: (DataFrame): Temporary data relevant to the current body part"""
+        if self.footstrike_algorithm == 'pcutoff':
+            X = self.filter_limb_from_pcutoff(MX, n)
+            self.cluster_eps = self.cluster_pcutoff_eps
+            self.cluster_min_samples = self.cluster_pcutoff_min_samples
+            self.cluster_trim_percent = self.cluster_pcutoff_trim_percent
+            skip_col_indices = []
+        elif self.footstrike_algorithm == 'position':
+            X = self.filter_limb_from_position(MX, n)
+            self.cluster_eps = self.cluster_position_eps
+            self.cluster_min_samples = self.cluster_position_min_samples
+            self.cluster_trim_percent = self.cluster_position_trim_percent
+            skip_col_indices = [2]  # skip pvalues
+
+        # CLUSTER FOOTSTEPS
+        dbscan = DBSCAN(eps=self.cluster_eps, min_samples=self.cluster_min_samples)
+        Y_list = []
+        skipped = 0
+        for col in range(X.shape[1]):
+            if col not in skip_col_indices: Y_list.append(X[:,col]*self.cluster_weights[col-skipped])#/np.max(X[:,col]))
+            else: skipped += 1
+        Y = np.column_stack(Y_list)
+        clusters = dbscan.fit_predict(Y)
+
+        # CREATE TEMPORARY DATAFRAME AND SET UN-CLUSTERED P VALUES TO 0, FILL VALUES WITHIN CLUSTERS
+        combined_array = np.column_stack((X[:, 0], X[:, 1], X[:, 2], X[:, 3], clusters))
+        tempDF = pd.DataFrame(combined_array, columns=['x', 'y', 'p', 'frame', 'cluster'])
+
+        # ONLY PAY ATTENTION TO P VALUES IF USING THE PCUTOFF FOOTSTRIKE ALGORITHM FOR EXAMPLE WITH FL_GROUND
+        if self.footstrike_algorithm == 'pcutoff': tempDF.loc[tempDF['p'] <= self.pcutoff, 'cluster'] = -1
+
+        minFrame, maxFrame = tempDF['frame'].min(), tempDF['frame'].max()
+        average_cluster_size = len(tempDF) / len(tempDF['cluster'].unique())
+        cluster_trim = int(average_cluster_size * 0.01 * self.cluster_trim_percent)
+        cluster_exclude = int(average_cluster_size * 0.01 * self.cluster_exclusion_percent)
+        print("Cluster trimmed by the following at beginning and end:", cluster_trim)
+
+        tempDF = between_fill(tempDF, 'cluster')
+        for cluster in tempDF['cluster'].unique():
+            print('Processing ' + self.bodyparts[n] + ' cluster #:' + str(cluster),
+                  'Length of cluster: ' + str(len(tempDF[tempDF['cluster'] == cluster])),
+                  'Excluding if less than: ' + str(cluster_exclude))
+            if len(tempDF[tempDF['cluster'] == cluster]) < cluster_exclude:
+                tempDF.loc[tempDF['cluster'] == cluster, 'cluster'] = -1
+                print('Excluded cluster #: ' + str(
+                    cluster) + ' because it was under cluster_exclusion_percent for foot')
+            elif tempDF.loc[tempDF['cluster'] == cluster, 'frame'].isin([minFrame, maxFrame]).any():
+                tempDF.loc[tempDF['cluster'] == cluster, 'cluster'] = -1
+                print('Excluded cluster #: ' + str(cluster) + ' because it borders beginning or end of movie')
+            else:
+                temp_mean = tempDF[tempDF['cluster'] == cluster]['p'].mean()
+                tempDF.loc[tempDF['cluster'] == cluster, 'p'] = temp_mean
+                trimmed_list = trim_df_by_x(tempDF[tempDF['cluster'] == cluster]['p'].to_list(), cluster_trim)
+                tempDF.loc[tempDF['cluster'] == cluster, 'p'] = trimmed_list
+                tempDF.loc[tempDF['cluster'] == cluster, 'x'] = median_filter(
+                    tempDF.loc[tempDF['cluster'] == cluster, 'x'], size=5)
+                tempDF.loc[tempDF['cluster'] == cluster, 'y'] = median_filter(
+                    tempDF.loc[tempDF['cluster'] == cluster, 'y'], size=5)
+
+        tempDF.loc[tempDF['cluster'] == -1, 'p'] = 0.0
+
+        # RETURN SUBSET ARRAY, CLUSTERS, AND EDITED TEMPDF
+        return tempDF.astype('float32')
+
+    def filter_limb_from_pcutoff(self, MX, n):
         """Unpacks the numpy array by body part (indicated by n), clusters footsteps, and returns a convenient tempDF
         :param MX: (np.array): Input numpy array of all tracking data
         :param n: (int): Number of current body part
@@ -156,45 +227,22 @@ class Manager:
         num_rows = X.shape[0]
         new_column = (np.arange(num_rows)).reshape([X.shape[0], 1])
         X = np.concatenate((X, new_column), axis=1)
+        return X
 
-        # CLUSTER FOOTSTEPS
-        dbscan = DBSCAN(eps=self.cluster_eps, min_samples=self.cluster_min_samples)
-        clusters = dbscan.fit_predict(X)
+    def filter_limb_from_position(self, MX, n):
+        """Unpacks the numpy array by body part (indicated by n), clusters footsteps, and returns a convenient tempDF
+        :param MX: (np.array): Input numpy array of all tracking data
+        :param n: (int): Number of current body part
+        :returns: tempDF: (DataFrame): Temporary data relevant to the current body part"""
 
-        # CREATE TEMPORARY DATAFRAME AND SET UN-CLUSTERED P VALUES TO 0, FILL VALUES WITHIN CLUSTERS
-        combined_array = np.column_stack((X[:, 0], X[:, 1], X[:, 2], X[:, 3], clusters))
-        tempDF = pd.DataFrame(combined_array, columns=['x', 'y', 'p', 'frame', 'cluster'])
-
-        tempDF.loc[tempDF['p'] <= self.pcutoff,'cluster'] = -1
-        minFrame,maxFrame = tempDF['frame'].min(), tempDF['frame'].max()
-        average_cluster_size = len(tempDF)/len(tempDF['cluster'].unique())
-        cluster_trim = int(average_cluster_size * 0.01 * self.cluster_trim_percent)
-        cluster_exclude = int(average_cluster_size * 0.01 * self.cluster_exclusion_percent)
-        print("Cluster trimmed by the following at beginning and end:", cluster_trim)
-
-        tempDF = between_fill(tempDF,'cluster')
-        for cluster in tempDF['cluster'].unique():
-            print('Processing ' + self.bodyparts[n] + ' cluster #:' + str(cluster),
-                'Length of cluster: ' + str(len(tempDF[tempDF['cluster'] == cluster])),
-                  'Excluding if less than: ' + str(cluster_exclude))
-            if len(tempDF[tempDF['cluster'] == cluster]) < cluster_exclude:
-                tempDF.loc[tempDF['cluster'] == cluster,'cluster'] = -1
-                print('Excluded cluster #: ' + str(cluster) + ' because it was under cluster_exclusion_percent for foot')
-            elif tempDF.loc[tempDF['cluster'] == cluster,'frame'].isin([minFrame,maxFrame]).any() :
-                tempDF.loc[tempDF['cluster'] == cluster, 'cluster'] = -1
-                print('Excluded cluster #: ' + str(cluster) + ' because it borders beginning or end of movie')
-            else:
-                temp_mean = tempDF[tempDF['cluster'] == cluster]['p'].mean()
-                tempDF.loc[tempDF['cluster'] == cluster,'p'] = temp_mean
-                trimmed_list = trim_df_by_x(tempDF[tempDF['cluster'] == cluster]['p'].to_list(),cluster_trim)
-                tempDF.loc[tempDF['cluster'] == cluster,'p'] = trimmed_list
-                tempDF.loc[tempDF['cluster'] == cluster,'x'] = median_filter(tempDF.loc[tempDF['cluster'] == cluster,'x'],size=5)
-                tempDF.loc[tempDF['cluster'] == cluster,'y'] = median_filter(tempDF.loc[tempDF['cluster'] == cluster,'y'],size=5)
-
-        tempDF.loc[tempDF['cluster'] == -1,'p'] = 0.0
-
-        # RETURN SUBSET ARRAY, CLUSTERS, AND EDITED TEMPDF
-        return tempDF.astype('float32')
+        # EXTRACT DESIRED COLUMNS FROM MX
+        X = MX[:, 0 + n * 3:3 + n * 3]
+        num_rows = X.shape[0]
+        new_column = (np.arange(num_rows)).reshape([X.shape[0], 1])
+        x_derivative = d_dt(X[:, 0]).reshape([X.shape[0], 1])
+        y_derivative = d_dt(X[:, 1]).reshape([X.shape[0], 1])
+        X = np.concatenate((X, new_column,x_derivative,y_derivative), axis=1)
+        return X
 
     def cluster_plot_singles(self, tempDF,n, ylabs = ['y','frame']):
         """Loops through provided ylabs to create cluster plots
@@ -204,7 +252,8 @@ class Manager:
         :return: temp_plots.values(): (list): readyplot objects to use in subplots later, unpack with rp0, rp1 = fnc()"""
 
         # FILTER TEMPDF BY PCUTOFF FOR PLOTTING, INITIALIZE OUTPUT DICT
-        plotDF = tempDF[tempDF['p'] > self.pcutoff]
+        #plotDF = tempDF[tempDF['p'] > self.pcutoff]
+        plotDF = tempDF.copy()
         temp_plots = {}
 
         # KWARGS FOR READYPLOT, MOSTLY ESTHETICS BUT ALSO TITLE AND AVOIDING ERRORS WITH MARKER INPUT
@@ -383,21 +432,28 @@ class Manager:
 # %% INTERNAL METHODS
     def set_config_pcutoff(self):
         """Set the pcutoff parameter in the config.yaml file to ensure DLC functions behave as expected."""
-        self.config_path = os.getcwd() + os.sep + "dlcfilterpipeline" + os.sep + "config.yaml"
+        self.config_path = "dlcfilterpipeline" + os.sep + "config.yaml" #os.getcwd() + os.sep +
         yaml = YAML()
         with open(self.config_path, 'r') as file: data = yaml.load(file)
         data['pcutoff'] = self.pcutoff
         with open(self.config_path, 'w') as file:
             yaml.dump(data, file)
 
+    def fix_config_abs_path(self):
+        yaml = YAML()
+        with open(self.config_path, 'r') as file: data = yaml.load(file)
+        data['project_path'] = self.config_path.split("/")[0] + "/"
+        with open(self.config_path, 'w') as file:
+            yaml.dump(data, file)
+
     def select_initial_files(self):
         """GUI multi-file selector to determine list of videos to process if not provided programmatically."""
-        root = tk.Tk()
-        root.withdraw()
-        self.video_paths = filedialog.askopenfilenames(
-            title="Select Files", filetypes=[("Video Files", "*.*")],initialdir=self.defaultdir)
-        for path in self.video_paths: print("Selected file: ", path)
-        root.destroy()
+        # root = tk.Tk()
+        # root.withdraw()
+        # self.video_paths = filedialog.askopenfilenames(
+        #     title="Select Files", filetypes=[("Video Files", "*.*")],initialdir=self.defaultdir)
+        # for path in self.video_paths: print("Selected file: ", path)
+        # root.destroy()
         return
 
     def initialize_video_path(self,path):
@@ -428,6 +484,7 @@ class Manager:
             self.config_path,
             self.current_path,
             self.shuffle])
+        self.fix_config_abs_path()
 
         # SAVE THE CREATED MODEL NAME TO JSON FOR FUTURE USE
         with open("dlcfilterpipeline" + os.sep + "model_name.json", 'r') as openfile:
@@ -519,26 +576,28 @@ class Manager:
             self.current_path,
             self.shuffle,
             ",".join(label_list)])
+        self.fix_config_abs_path()
 
     def get_text(self):
         """GUI for user text acquisition
-        :return self.text: (string): Text entered by the user"""
-        # INITIALIZE BUTTON
-        def get_text_button():
-            self.text = entry.get()
-            root.withdraw()
-            root.update()
-            root.destroy()
-
-        # TKINTER MAINLOOP WHICH CATCHES TEXT SUBMISSION
-        root = tk.Tk()
-        root.title("Text Prompt Example")
-        entry = tk.Entry(root, width=30)
-        entry.pack(pady=10)
-        button = tk.Button(root, text="Submit", command=get_text_button)
-        button.pack(pady=5)
-        root.mainloop()
-        return self.text
+        # :return self.text: (string): Text entered by the user"""
+        # # INITIALIZE BUTTON
+        # def get_text_button():
+        #     self.text = entry.get()
+        #     root.withdraw()
+        #     root.update()
+        #     root.destroy()
+        #
+        # # TKINTER MAINLOOP WHICH CATCHES TEXT SUBMISSION
+        # root = tk.Tk()
+        # root.title("Text Prompt Example")
+        # entry = tk.Entry(root, width=30)
+        # entry.pack(pady=10)
+        # button = tk.Button(root, text="Submit", command=get_text_button)
+        # button.pack(pady=5)
+        # root.mainloop()
+        # return self.text
+        return
 
     def create_AGATHA_arrays(self):
         self.nose_array = np.array([

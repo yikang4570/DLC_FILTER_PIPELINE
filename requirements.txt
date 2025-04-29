@@ -5,4 +5,4 @@ readyplot~=1.4.4
 tables~=3.10.2
 scipy~=1.15.1
 scikit-learn~=1.6.1
-pathlib~=1.0.1
+pathlib~=  1.0.1
