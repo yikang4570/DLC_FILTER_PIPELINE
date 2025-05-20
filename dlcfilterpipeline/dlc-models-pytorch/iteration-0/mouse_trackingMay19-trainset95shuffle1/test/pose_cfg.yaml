@@ -1,0 +1,20 @@
+dataset: /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/mouse_tracking-lake_lab-2025-05-19
+dataset_type: multi-animal-imgaug
+num_joints: 6
+all_joints:
+- - 0
+- - 1
+- - 2
+- - 3
+- - 4
+- - 5
+all_joints_names:
+- Nose
+- Tail
+- FL_gen
+- FR_gen
+- BL_gen
+- BR_gen
+net_type: resnet_50
+global_scale: 1
+scoremap_dir: test
