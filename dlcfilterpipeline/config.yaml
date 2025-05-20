@@ -1,181 +1,41 @@
-# Project definitions (do not edit)
-Task: Cropped_HiRes
-scorer: Shawn Pavey
-date: Mar14
-multianimalproject: false
-identity:
-
-
-# Project path (change when moving around)
-project_path: dlcfilterpipeline/
-
-
-# Default DeepLabCut engine to use for shuffle creation (either pytorch or tensorflow)
-engine: pytorch
-
-
-# Annotation data set configuration (and individual video cropping parameters)
-video_sets:
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240705/20240705_4153_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240705/20240705_4154_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240705/20240705_4156_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240705/20240705_4161_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240705/20240705_4163_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240705/20240705_4165_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240705/20240705_4175_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240705/20240705_4182_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240715/20240715_4153_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240715/20240715_4154_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240715/20240715_4156_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240715/20240715_4161_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240715/20240715_4163_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240715/20240715_4165_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240715/20240715_4175_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240715/20240715_4182_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240722/20240722_4153_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240722/20240722_4154_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240722/20240722_4156_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240722/20240722_4161_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240722/20240722_4163_02.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240722/20240722_4165_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240722/20240722_4175_02.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20240722/20240722_4182_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20241105/20241105_4281_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20241105/20241105_4284_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20241105/20241105_4286_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20241105/20241105_4292_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20241105/20241105_4301_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20241105/20241105_4303_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20241105/20241105_4304_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20241105/20241105_4306_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20241105/20241105_4311_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20241105/20241105_4313_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20241105/20241105_4315_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4353_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4355_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4365_02.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4371_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4373_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4375_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4381_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4383_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4385_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4391_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4393_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4394_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250114/20250114_4396_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250303/20250303_4421_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250303/20250303_4423_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250303/20250303_4425_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250303/20250303_4435_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250303/20250303_4441_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250303/20250303_4443_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250303/20250303_4451_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250303/20250303_4455_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250303/20250303_4463_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250303/20250303_4464_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/20250303/20250303_4466_01.avi:
-    crop: 0, 1280, 420, 720
+SuperAnimalConversionTables:
+Task: mouse_tracking
+TrainingFraction:
+- 0.95
+alphavalue: 0.4
+batch_size: 8
 bodyparts:
 - Nose
 - Tail
-- FL_ground
 - FL_gen
-- FR_ground
 - FR_gen
-- BL_ground
 - BL_gen
-- BR_ground
 - BR_gen
-
-
-# Fraction of video to start/stop when extracting frames for labeling/refinement
-
-
-# Fraction of video to start/stop when extracting frames for labeling/refinement
-
-
-# Fraction of video to start/stop when extracting frames for labeling/refinement
-
-
-# Fraction of video to start/stop when extracting frames for labeling/refinement
-start: 0
-stop: 1
+colormap: rainbow
+corner2move2:
+- 50
+- 50
+cropping: true
+date: May19
+default_augmenter: default
+default_net_type: resnet_50
+detector_batch_size: 1
+detector_snapshotindex: -1
+dotsize: 3
+engine: pytorch
+identity:
+iteration: 0
+move2corner: true
+multianimalproject: false
 numframes2pick: 20
-
-
-# Plotting configuration
+pcutoff: 0.6
+project_path: /opt/app/dlcfilterpipeline
+scorer: lake_lab
 skeleton:
 - - Nose
   - Tail
 - - Nose
   - FL_gen
-- - FL_ground
-  - FL_gen
-- - BL_ground
-  - BL_gen
-- - FR_ground
-  - FR_gen
-- - BR_ground
-  - BR_gen
 - - Tail
   - BL_gen
 - - Nose
@@ -183,39 +43,67 @@ skeleton:
 - - Tail
   - BR_gen
 skeleton_color: yellow
-pcutoff: 0.6
-dotsize: 2
-alphavalue: 0.4
-colormap: rainbow
-
-
-# Training,Evaluation and Analysis configuration
-TrainingFraction:
-- 0.95
-iteration: 0
-default_net_type: resnet_50
-default_augmenter: default
 snapshotindex: -1
-detector_snapshotindex: -1
-batch_size: 8
-detector_batch_size: 1
-
-
-# Cropping Parameters (for analysis and outlier frame detection)
-cropping: true
-#if cropping is true for analysis, then set the values here:
+start: 0
+stop: 1
+video_sets:
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240610_4132_01.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240610_4135_02.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240610_4141_03.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240610_4146_11.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240624_4132_02.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240624_4135_03.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240624_4141_04.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250103_4355_01.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250103_4365_01.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250103_4373_01.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250103_4394_01.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250103_4396_01.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250114_4355_02.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250114_4365_02.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250114_4373_01.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250114_4394_01.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250114_4396_01.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250121_4355_03.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250121_4365_03.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250121_4373_03.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250121_4394_03.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250121_4396_03.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250428_4551_01.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250428_4556_01.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250506_4551_02.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250506_4556_02.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250513_4551_03.avi:
+    crop: 0, 1280, 420, 720
+  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250513_4556_03.avi:
+    crop: 0, 1280, 420, 720
 x1: 0
 x2: 1280
 y1: 420
 y2: 720
-
-
-# Refinement configuration (parameters from annotation dataset configuration also relevant in this stage)
-corner2move2:
-- 50
-- 50
-move2corner: true
-
-
-# Conversion tables to fine-tune SuperAnimal weights
-SuperAnimalConversionTables:

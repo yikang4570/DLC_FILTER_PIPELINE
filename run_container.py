@@ -6,7 +6,7 @@ parser.add_argument("filename", help="Name of the file to process")
 args = parser.parse_args()
 video = args.filename
 
-using_docker = False
+using_docker = True
 if using_docker:
     import yaml
     yaml_file_path = "dlcfilterpipeline/config.yaml"

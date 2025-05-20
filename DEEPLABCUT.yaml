@@ -21,18 +21,23 @@
 # update:  conda env update -f DEEPLABCUT.yaml
 name: DEEPLABCUT
 channels:
+  - pytorch
   - conda-forge
   - defaults
 dependencies:
   - python=3.12
   - pip
-  - ipython
-  - jupyter
-  - nb_conda
-  - notebook<7.0.0
   - ffmpeg
   - pytables==3.8.0
+  - cpuonly
+  - pytorch
+  - torchvision
+  - opencv
   - pip:
-    - torch
-    - torchvision
-    - deeplabcut[modelzoo,wandb]==3.0.0rc8
+    - numpy~=1.26.4
+    - pandas~=2.2.3
+    - readyplot~=1.4.4
+    - scipy~=1.15.1
+    - scikit-learn~=1.6.1
+    - pathlib~=  1.0.1
+    - deeplabcut==3.0.0rc8

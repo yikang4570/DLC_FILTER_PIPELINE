@@ -13,3 +13,19 @@ Run Docker and forward port :0 of your IP to the display of the virtual machine
 docker run -p 8888:8888/tcp -it -e DISPLAY=192.168.1.144:0 -v /Users/paveyboys/Desktop/EXAMPLE:/opt/app/host shawnpavey/dlc_filter_pipeline:1.0
 
 Display is from xQuartz on mac, and you need to figure out what your number to make your display port available
+
+
+
+ssh shawn.pavey@compute1-client-1.ris.wustl.edu
+chmod +x /storage1/fs1/lake.s/Active/Shawn\ P/AAA.\ DEEPLABCUT/TEST20250303/wustl_cluster/wustl_jobs.sh
+/storage1/fs1/lake.s/Active/Shawn\ P/AAA.\ DEEPLABCUT/TEST20250303/wustl_cluster/wustl_jobs.sh
+
+
+
+docker run -v /Users/paveyboys/Desktop/EXAMPLE:/data shawnpavey/dlc_filter_pipeline:1.8 python run_container.py /data/SPENCE_EXAMPLE/AVI/20250303_4421_01.avi
+
+OBSERVATIONS:
+- Need to filter out paws that linger over a certain space. Maybe the ground model can help, or tune weights, or new model with side view
+- Need to connect separate footstrikes which share an X location but are split for some reason. Do this before removing edge clusters
+- Make folders for each plot typebgmod -L 100 /${compute_username}/mygroup
+- I still occasionally get a swap of left to right or vice versa, train model or filter out? It's in the raw as well
