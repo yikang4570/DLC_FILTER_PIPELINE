@@ -13,7 +13,7 @@ video_dir, video_filename = os.path.split(video_path)
 video_name, _ = os.path.splitext(video_filename)
 files_before = set(os.listdir(video_dir))
 
-deeplabcut.analyze_videos(config_path, [video_path], videotype='avi',shuffle=0, save_as_csv=True)
+deeplabcut.analyze_videos(config_path, [video_path], videotype='avi',shuffle=shuffle, save_as_csv=True)
 
 files_after = set(os.listdir(video_dir))
 new_files = files_after - files_before

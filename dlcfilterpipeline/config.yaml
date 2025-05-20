@@ -1,51 +1,20 @@
-SuperAnimalConversionTables:
+# Project definitions (do not edit)
 Task: mouse_tracking
-TrainingFraction:
-- 0.95
-alphavalue: 0.4
-batch_size: 8
-bodyparts:
-- Nose
-- Tail
-- FL_gen
-- FR_gen
-- BL_gen
-- BR_gen
-colormap: rainbow
-corner2move2:
-- 50
-- 50
-cropping: true
-date: May19
-default_augmenter: default
-default_net_type: resnet_50
-detector_batch_size: 1
-detector_snapshotindex: -1
-dotsize: 3
-engine: pytorch
-identity:
-iteration: 0
-move2corner: true
-multianimalproject: false
-numframes2pick: 20
-pcutoff: 0.6
-project_path: /opt/app/dlcfilterpipeline
 scorer: lake_lab
-skeleton:
-- - Nose
-  - Tail
-- - Nose
-  - FL_gen
-- - Tail
-  - BL_gen
-- - Nose
-  - FR_gen
-- - Tail
-  - BR_gen
-skeleton_color: yellow
-snapshotindex: -1
-start: 0
-stop: 1
+date: May19
+multianimalproject: false
+identity:
+
+
+# Project path (change when moving around)
+project_path: dlcfilterpipeline/
+
+
+# Default DeepLabCut engine to use for shuffle creation (either pytorch or tensorflow)
+engine: pytorch
+
+
+# Annotation data set configuration (and individual video cropping parameters)
 video_sets:
   /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240610_4132_01.avi:
     crop: 0, 1280, 420, 720
@@ -103,7 +72,82 @@ video_sets:
     crop: 0, 1280, 420, 720
   /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250513_4556_03.avi:
     crop: 0, 1280, 420, 720
+bodyparts:
+- Nose
+- Tail
+- FL_gen
+- FR_gen
+- BL_gen
+- BR_gen
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+start: 0
+stop: 1
+numframes2pick: 20
+
+
+# Plotting configuration
+skeleton:
+- - Nose
+  - Tail
+- - Nose
+  - FL_gen
+- - Tail
+  - BL_gen
+- - Nose
+  - FR_gen
+- - Tail
+  - BR_gen
+skeleton_color: yellow
+pcutoff: 0.6
+dotsize: 3
+alphavalue: 0.4
+colormap: rainbow
+
+
+# Training,Evaluation and Analysis configuration
+TrainingFraction:
+- 0.95
+iteration: 0
+default_net_type: resnet_50
+default_augmenter: default
+snapshotindex: -1
+detector_snapshotindex: -1
+batch_size: 8
+detector_batch_size: 1
+
+
+# Cropping Parameters (for analysis and outlier frame detection)
+cropping: true
+#if cropping is true for analysis, then set the values here:
 x1: 0
 x2: 1280
 y1: 420
 y2: 720
+
+
+# Refinement configuration (parameters from annotation dataset configuration also relevant in this stage)
+corner2move2:
+- 50
+- 50
+move2corner: true
+
+
+# Conversion tables to fine-tune SuperAnimal weights
+SuperAnimalConversionTables:
