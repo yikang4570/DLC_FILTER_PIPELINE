@@ -633,14 +633,14 @@ class Manager:
 
         for i in range(len(start_indices)):
             AGATHA_row = [0,# Temporary Step Number, filter later by T, start at 1
-                          fore_or_hind,# Fore or Hind
+                          fore_or_hind,# Hind 0 Fore 1
                           int(x[start_indices[i]]),# X Foot-strike
                           start_indices[i],# T Foot-strike
                           int(x[end_indices[i]]),# X Toe-off
                           end_indices[i],# T Toe-off
                           np.average(np.array(x[start_indices[i]:end_indices[i]])),# X Centroid
                           int(start_indices[i] + end_indices[i])/2,# T Centroid
-                          left_or_right,# Left or Right
+                          left_or_right,# Right 0, Left 1
                           x[start_indices[i]],# X Foot-strike
                           y[start_indices[i]],# Y Foot-strike
                           mouse_dir]# Mouse Dir
