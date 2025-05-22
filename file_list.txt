@@ -1,2 +1,1 @@
-/Users/paveyboys/Desktop/EXAMPLE/TRACKING_ONLY/20250303_4421_01.avi
-/Users/paveyboys/Desktop/EXAMPLE/TRACKING_ONLY/20250513_4556_03.avi
+/Users/paveyboys/Desktop/YI EXAMPLE/20250303_4421_01.avi
