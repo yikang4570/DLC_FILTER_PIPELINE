@@ -157,7 +157,7 @@ class calculator_top_velocity:
             post_BL = self.BL[pre_BL_indx+1, 3] if (not pre_BL_indx+1 == len(self.BL)) else None
 
         self.TS_F = (self.FR[i,3]-pre_FL)/(post_FL-pre_FL) if (not pre_FL is None) and (not post_FL is None) else 0
-        self.TS_F = (self.BR[i,3]-pre_BL)/(post_BL-pre_BL) if (not pre_FL is None) and (not post_BL is None) else 0
+        self.TS_B = (self.BR[i,3]-pre_BL)/(post_BL-pre_BL) if (not pre_BL is None) and (not post_BL is None) else 0
 
     def step_width(self,i):
         pre_FL_indx = self.max_under_threshold(self.FL[:, 3], self.FR[i, 3])
@@ -192,7 +192,7 @@ class calculator_top_velocity:
                 Area = np.sqrt(s*(s-a)*(s-b)*(s-c))
                 self.SW_B = (Area*2)/a
                 self.SL_B = a
-                self.SS_B = np.sqrt(b ** 2 - self.SW_F ** 2) / a
+                self.SS_B = np.sqrt(b ** 2 - self.SW_B ** 2) / a
         else:
             self.SW_B = 0
             self.SL_B = 0
