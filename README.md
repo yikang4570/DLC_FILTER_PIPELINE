@@ -19,6 +19,7 @@ Display is from xQuartz on mac, and you need to figure out what your number to m
 ssh shawn.pavey@compute1-client-1.ris.wustl.edu
 chmod +x /storage1/fs1/lake.s/Active/Shawn\ P/AAA.\ DEEPLABCUT/TEST20250303/wustl_cluster/wustl_jobs.sh
 /storage1/fs1/lake.s/Active/Shawn\ P/AAA.\ DEEPLABCUT/TEST20250303/wustl_cluster/wustl_jobs.sh
+Check jobs at: https://ood.ris.wustl.edu
 
 
 
