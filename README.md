@@ -24,9 +24,3 @@ Check jobs at: https://ood.ris.wustl.edu
 
 
 docker run -v /Users/paveyboys/Desktop/EXAMPLE:/data shawnpavey/dlc_filter_pipeline:1.8 python run_container.py /data/SPENCE_EXAMPLE/AVI/20250303_4421_01.avi
-
-OBSERVATIONS:
-- Need to filter out paws that linger over a certain space. Maybe the ground model can help, or tune weights, or new model with side view
-- Need to connect separate footstrikes which share an X location but are split for some reason. Do this before removing edge clusters
-- Make folders for each plot typebgmod -L 100 /${compute_username}/mygroup
-- I still occasionally get a swap of left to right or vice versa, train model or filter out? It's in the raw as well
