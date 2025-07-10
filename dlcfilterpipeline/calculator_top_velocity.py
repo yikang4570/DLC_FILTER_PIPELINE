@@ -118,10 +118,7 @@ class calculator_top_velocity:
         else: return None
 
     def distance(self,xs,ys):
-        sum = 0
-        for i,v in enumerate(xs): sum += (xs[i] - ys[i])**2
-        return np.sqrt(sum)
-
+        return np.sqrt((xs[0]-xs[1])**2 + (ys[0]-ys[1])**2)
 
     def calculate_parameters(self):
         for i in range(min(len(self.FL), len(self.FR))):
@@ -147,12 +144,12 @@ class calculator_top_velocity:
 
     def temporal_symmetry(self,i):
         pre_FL_indx = self.max_under_threshold(self.FL[:,3],self.FR[i,3])
-        pre_BL_indx = self.max_under_threshold(self.BL[:, 3], self.BR[i, 3])
+        pre_BL_indx = self.max_under_threshold(self.BL[:,3],self.BR[i,3])
 
         pre_FL = self.FL[pre_FL_indx,3] if (not pre_FL_indx is None) else None
         if pre_FL_indx is not None:
             post_FL = self.FL[pre_FL_indx+1,3] if (not pre_FL_indx+1 == len(self.FL)) else None
-        pre_BL = self.BL[pre_BL_indx, 3] if (not pre_BL_indx is None) else None
+        pre_BL = self.BL[pre_BL_indx,3] if (not pre_BL_indx is None) else None
         if pre_BL_indx is not None:
             post_BL = self.BL[pre_BL_indx+1, 3] if (not pre_BL_indx+1 == len(self.BL)) else None
 
@@ -161,38 +158,37 @@ class calculator_top_velocity:
 
     def step_width(self,i):
         pre_FL_indx = self.max_under_threshold(self.FL[:, 3], self.FR[i, 3])
-        if pre_FL_indx is not None:
-            if pre_FL_indx + 1 != len(self.FL):
-                a = self.distance([self.FL[pre_FL_indx,9],self.FL[pre_FL_indx+1,9]],
-                                  [self.FL[pre_FL_indx,10],self.FL[pre_FL_indx+1,10]])
-                b = self.distance([self.FL[pre_FL_indx,9],self.FR[i,9]],
-                                  [self.FL[pre_FL_indx,10],self.FR[i,10]])
-                c = self.distance([self.FL[pre_FL_indx+1,9],self.FR[i,9]],
-                                  [self.FL[pre_FL_indx+1,10],self.FR[i,10]])
-                s = (a+b+c)/2
-                Area = np.sqrt(s*(s-a)*(s-b)*(s-c))
-                self.SW_F = (Area*2)/a
-                self.SL_F = a
-                self.SS_F = np.sqrt(b**2 - self.SW_F**2)/a
+
+        if (pre_FL_indx is not None) and (pre_FL_indx + 1 != len(self.FL)):
+            a = self.distance([self.FL[pre_FL_indx,9],self.FL[pre_FL_indx+1,9]],
+                              [self.FL[pre_FL_indx,10],self.FL[pre_FL_indx+1,10]])
+            b = self.distance([self.FL[pre_FL_indx,9],self.FR[i,9]],
+                              [self.FL[pre_FL_indx,10],self.FR[i,10]])
+            c = self.distance([self.FL[pre_FL_indx+1,9],self.FR[i,9]],
+                              [self.FL[pre_FL_indx+1,10],self.FR[i,10]])
+            s = (a+b+c)/2
+            Area = np.sqrt(s*(s-a)*(s-b)*(s-c))
+            self.SW_F = (Area*2)/a
+            self.SL_F = a
+            self.SS_F = np.sqrt(b**2 - self.SW_F**2)/a
         else:
             self.SW_F = 0
             self.SL_F = 0
             self.SS_F = 0
 
         pre_BL_indx = self.max_under_threshold(self.BL[:, 3], self.BR[i, 3])
-        if not pre_BL_indx is not None:
-            if pre_BL_indx + 1 != len(self.BL):
-                a = self.distance([self.BL[pre_BL_indx,9],self.BL[pre_BL_indx+1,9]],
-                                  [self.BL[pre_BL_indx,10],self.BL[pre_BL_indx+1,10]])
-                b = self.distance([self.BL[pre_BL_indx,9],self.BR[i,9]],
-                                  [self.BL[pre_BL_indx,10],self.BR[i,10]])
-                c = self.distance([self.BL[pre_BL_indx+1,9],self.BR[i,9]],
-                                  [self.BL[pre_BL_indx+1,10],self.BR[i,10]])
-                s = (a+b+c)/2
-                Area = np.sqrt(s*(s-a)*(s-b)*(s-c))
-                self.SW_B = (Area*2)/a
-                self.SL_B = a
-                self.SS_B = np.sqrt(b ** 2 - self.SW_B ** 2) / a
+        if (pre_BL_indx is not None) and (pre_BL_indx + 1 != len(self.BL)):
+            a = self.distance([self.BL[pre_BL_indx,9],self.BL[pre_BL_indx+1,9]],
+                              [self.BL[pre_BL_indx,10],self.BL[pre_BL_indx+1,10]])
+            b = self.distance([self.BL[pre_BL_indx,9],self.BR[i,9]],
+                              [self.BL[pre_BL_indx,10],self.BR[i,10]])
+            c = self.distance([self.BL[pre_BL_indx+1,9],self.BR[i,9]],
+                              [self.BL[pre_BL_indx+1,10],self.BR[i,10]])
+            s = (a+b+c)/2
+            Area = np.sqrt(s*(s-a)*(s-b)*(s-c))
+            self.SW_B = (Area*2)/a
+            self.SL_B = a
+            self.SS_B = np.sqrt(b ** 2 - self.SW_B ** 2) / a
         else:
             self.SW_B = 0
             self.SL_B = 0
@@ -254,7 +250,7 @@ class calculator_top_velocity:
         sub.save()
 
 if __name__ == '__main__':
-    filename = '/Users/paveyboys/Desktop/PYTHON_TOP_VELOCITY/20250121_4353_01_DATA.mat'
+    filename = '/Users/paveyboys/Desktop/TOP_VELOCITY/20250121_4353_01_DATA.mat'
     calculator_top_velocity(filename)
 
 
