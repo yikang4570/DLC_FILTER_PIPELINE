@@ -105,10 +105,12 @@ if __name__ == "__main__":
     root = tk.Tk()
     root.withdraw()
     folder = aggregate_sub_files(root)
-    #folder = filedialog.askdirectory(title="Select Folder Containing PNGs")
+    #manual_folder = filedialog.askdirectory(title="Select Folder Containing PNGs",initialdir= '/Volumes/lake.s/Active/Shawn P/D. DATA (PROCESSED)/A. ELASTIN PROJECT/GAIT')
+    #folder = [manual_folder]
     if folder:
         root.deiconify()
-        app = PNGReviewer(root, folder)
+        for f in folder:
+            app = PNGReviewer(root, f)
         root.mainloop()
     else:
         print("No folder selected.")

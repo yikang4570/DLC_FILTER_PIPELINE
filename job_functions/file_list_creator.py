@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 import os
 
-select_individual_files = True
+select_individual_files = False
 
 def select_files_and_save_paths():
     root = tk.Tk()
