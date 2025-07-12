@@ -291,7 +291,7 @@ def get_excluded_filenames(input_folder,files):
 
     return files_to_exclude
 
-def get_pixel_resolution(input_folder):
+def get_pixel_resolution(input_folder,gui_enabled):
     meters_per_pixel = 0.0004083
     calibration_folder = os.path.join(input_folder.split('analyzed')[0],'AVI')
     try:
@@ -300,7 +300,8 @@ def get_pixel_resolution(input_folder):
         json_file = os.path.join(calibration_folder, folder_date + '_calibration_02.json')
         if not os.path.isfile(json_file):
             avi_file = os.path.join(calibration_folder, folder_date + '_calibration_02.avi')
-            get_meters_per_pixel(avi_file)
+            get_meters_per_pixel(avi_file, gui_enabled=gui_enabled,default_mpp=meters_per_pixel)
+
     except:
         print("Calibration file not found")
         print(f"Using {meters_per_pixel} meters per pixel")
@@ -313,7 +314,7 @@ def get_pixel_resolution(input_folder):
 
     return meters_per_pixel
 
-def create_master_excel(input_folder,excel_files):
+def create_master_excel(input_folder,excel_files,gui_enabled = False):
     col_names = [
         'File',
         'Left Fore Duty Factor',
@@ -338,7 +339,7 @@ def create_master_excel(input_folder,excel_files):
     ]
 
     output_rows = []
-    meters_per_pixel = get_pixel_resolution(input_folder)
+    meters_per_pixel = get_pixel_resolution(input_folder,gui_enabled)
     print(f"Meters per pixel: {meters_per_pixel}")
 
     for file in excel_files:
@@ -378,6 +379,6 @@ if __name__ == '__main__':
         else:
             print(f"Skipping {filename}.")
 
-    create_master_excel(manual_folder,output_excel_files)
+    create_master_excel(manual_folder,output_excel_files,gui_enabled = True)
 
 
