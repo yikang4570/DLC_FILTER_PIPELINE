@@ -6,6 +6,8 @@ import readyplot as rp
 import pandas as pd
 from tkinter import filedialog
 import os
+import json
+from extract_calibration_scale import get_meters_per_pixel
 
 class calculator_top_velocity:
     def __init__(self, data_file_path):
@@ -290,7 +292,25 @@ def get_excluded_filenames(input_folder,files):
     return files_to_exclude
 
 def get_pixel_resolution(input_folder):
-    meters_per_pixel = None
+    meters_per_pixel = 0.0004083
+    calibration_folder = os.path.join(input_folder.split('analyzed')[0],'AVI')
+    try:
+        folder_name = os.path.split(input_folder)[-1]
+        folder_date = folder_name.split('analyzed')[0]
+        json_file = os.path.join(calibration_folder, folder_date + '_calibration_02.json')
+        if not os.path.isfile(json_file):
+            avi_file = os.path.join(calibration_folder, folder_date + '_calibration_02.avi')
+            get_meters_per_pixel(avi_file)
+    except:
+        print("Calibration file not found")
+        print(f"Using {meters_per_pixel} meters per pixel")
+        return meters_per_pixel
+
+    with open(json_file,'r') as f:
+        json_data = json.load(f)
+
+    meters_per_pixel = json_data['Bottom meters per pixel']
+
     return meters_per_pixel
 
 def create_master_excel(input_folder,excel_files):
@@ -314,11 +334,12 @@ def create_master_excel(input_folder,excel_files):
         'Spatial Symmetry Hind',
         'Top Nose Velocity (m/frame)',
         'Top Body Velocity (m/frame)',
-        'Bottom meters/pixel'
+        'Bottom meters per pixel'
     ]
 
     output_rows = []
     meters_per_pixel = get_pixel_resolution(input_folder)
+    print(f"Meters per pixel: {meters_per_pixel}")
 
     for file in excel_files:
         output_row = [file.split('.')[0]]
@@ -326,12 +347,15 @@ def create_master_excel(input_folder,excel_files):
         average_data_over_cycles = temp_df.mask(temp_df == 0).mean(axis=0)
 
         columns_to_convert_to_metric = [
-            'Fore Step Width (m)',
-            'Hind Step Width (m)',
-            'Fore Stride Length (m)',
-            'Hind Stride Length (m)',
-            'Top Nose Velocity (m/frame)',
-            'Top Body Velocity (m/frame)']
+            'Fore Step Width',
+            'Hind Step Width',
+            'Fore Stride Length',
+            'Hind Stride Length',
+            'Top Nose Velocity',
+            'Top Body Velocity']
+
+        for i, column in enumerate(columns_to_convert_to_metric):
+            average_data_over_cycles[column] = average_data_over_cycles[column] * meters_per_pixel
 
         output_row.extend(average_data_over_cycles)
         output_row.append(meters_per_pixel)
@@ -339,7 +363,6 @@ def create_master_excel(input_folder,excel_files):
 
     df = pd.DataFrame(output_rows, columns=col_names)
     df.to_excel(os.path.join(input_folder,"MASTER_GAIT.xlsx"), index=False)
-
 
 if __name__ == '__main__':
     manual_folder = filedialog.askdirectory(title="Select Folder")
