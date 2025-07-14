@@ -315,6 +315,7 @@ def get_pixel_resolution(input_folder,gui_enabled):
     return meters_per_pixel
 
 def create_master_excel(input_folder,excel_files,gui_enabled = False):
+    folder_name = os.path.split(input_folder)[-1]
     col_names = [
         'File',
         'Left Fore Duty Factor',
@@ -363,7 +364,7 @@ def create_master_excel(input_folder,excel_files,gui_enabled = False):
         output_rows.append(pd.Series(dict(zip(col_names,output_row))))
 
     df = pd.DataFrame(output_rows, columns=col_names)
-    df.to_excel(os.path.join(input_folder,"MASTER_GAIT.xlsx"), index=False)
+    df.to_excel(os.path.join(input_folder,folder_name + "_MASTER.xlsx"), index=False)
 
 if __name__ == '__main__':
     manual_folder = filedialog.askdirectory(title="Select Folder")
