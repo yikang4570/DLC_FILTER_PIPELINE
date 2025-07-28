@@ -367,9 +367,12 @@ def create_master_excel(input_folder,excel_files,gui_enabled = False):
     df.to_excel(os.path.join(input_folder,folder_name + "_MASTER.xlsx"), index=False)
 
 if __name__ == '__main__':
-    manual_folder = filedialog.askdirectory(title="Select Folder")
-    files = sorted([f for f in os.listdir(manual_folder) if f.endswith('.mat')])
-    files_to_exclude = get_excluded_filenames(manual_folder, files)
+    manual_folder = filedialog.askdirectory(title="Select Folder",initialdir="/Volumes/lake.s/Active/Shawn P/D. DATA (PROCESSED)/A. ELASTIN PROJECT/GAIT")
+    files = sorted([f for f in os.listdir(manual_folder) if (f.endswith('.mat') and 'DATA' in f and not "._" in f)])
+    try:
+        files_to_exclude = get_excluded_filenames(manual_folder, files)
+    except:
+        files_to_exclude = []
     output_excel_files = []
 
     for filename in files:
