@@ -11,6 +11,8 @@ class combine_master_sheets:
     def __init__(self, overall_gait_folder):
         # INITIALIZE CLASS VARIABLES
         self.overall_gait_folder = overall_gait_folder
+        self.time_frame = 14 # Days between surgery and sac
+        self.fps = 500
         self.path_list = []
         self.dataframe_list = []
         self.combined_dataframe = None
@@ -33,6 +35,23 @@ class combine_master_sheets:
         self.combined_dataframe = pd.concat(self.dataframe_list)
         extracted = self.combined_dataframe['File'].str.extract(r'(?P<Date>[^_]+)_(?P<MouseID>[^_]+)_(?P<TestNumber>[^_]+)')
         self.combined_dataframe = pd.concat([self.combined_dataframe, extracted], axis=1)
+        self.combined_dataframe['Top Nose Velocity (m/s)'] = self.combined_dataframe['Top Nose Velocity (m/frame)'] * self.fps
+        self.combined_dataframe['Top Body Velocity (m/s)'] = self.combined_dataframe['Top Body Velocity (m/frame)'] * self.fps
+
+        if os.path.exists(os.path.join(self.overall_gait_folder,"GAIT_GROUP_KEY.xlsx")):
+            key_df = pd.read_excel(os.path.join(self.overall_gait_folder,"GAIT_GROUP_KEY.xlsx"))
+            self.combined_dataframe['MouseID'] = self.combined_dataframe['MouseID'].astype(str).str.strip()
+            key_df['MouseID'] = key_df['MouseID'].astype(str).str.strip()
+            self.combined_dataframe = self.combined_dataframe.merge(key_df, on='MouseID', how='left')
+
+            self.combined_dataframe['Date'] = pd.to_datetime(
+            self.combined_dataframe['Date'], errors='coerce', format='%Y%m%d')
+            self.combined_dataframe['Sac date'] = pd.to_datetime(self.combined_dataframe['Sac date'], errors='coerce')
+            self.combined_dataframe.dropna(subset=['Date', 'Sac date'], inplace=True)
+            self.combined_dataframe['Time'] = (self.combined_dataframe['Date'] - self.combined_dataframe['Sac date']).dt.days
+            self.combined_dataframe['Time'] = self.combined_dataframe['Time'] + self.time_frame
+            self.combined_dataframe.loc[self.combined_dataframe['Time'] < 0,'Time'] = -3
+
 
     def create_excel(self):
         if self.combined_dataframe is not None:
