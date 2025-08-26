@@ -1,10 +1,4 @@
-
-dlcfilterpipeline/__pycache__/__init__.cpython-312.pyc
-dlcfilterpipeline/__pycache__/extract_calibration_scale.cpython-312.pyc
-job_functions/__pycache__/__init__.cpython-312.pyc
-job_functions/__pycache__/aggregate_sub_files.cpython-312.pyc
-job_functions/__pycache__/failure_logger.cpython-312.pyc
-dlcfilterpipeline/__pycache__/__init__.cpython-312.pyc
+job_functions/__pycache__/
 *.pyc
 /dlcfilterpipeline/__pycache__
 /.ipynb_checkpoints
