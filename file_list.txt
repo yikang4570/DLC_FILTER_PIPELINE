@@ -1,5 +1,1 @@
-C:/Users/shawn.pavey/Desktop/DLC_TEST/GAIT/20250721/AVI/20250721_4653_01.avi
-C:/Users/shawn.pavey/Desktop/DLC_TEST/GAIT/20250721/AVI/20250721_4653_02.avi
-C:/Users/shawn.pavey/Desktop/DLC_TEST/GAIT/20250721/AVI/20250721_4671_01.avi
-C:/Users/shawn.pavey/Desktop/DLC_TEST/GAIT/20250721/AVI/20250721_4671_02.avi
-C:/Users/shawn.pavey/Desktop/DLC_TEST/GAIT/20250721/AVI/20250721_4673_01.avi
+/Users/paveyboys/Desktop/EXAMPLE/FINAL/GAIT/20250303/AVI/20250303_4421_01.avi
