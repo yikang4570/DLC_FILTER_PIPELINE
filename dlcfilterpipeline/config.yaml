@@ -7,7 +7,7 @@ identity:
 
 
 # Project path (change when moving around)
-project_path: C:\Users\shawn.pavey\Documents\GitHub\DLC_FILTER_PIPELINE\dlcfilterpipeline
+project_path: dlcfilterpipeline/
 
 
 # Default DeepLabCut engine to use for shuffle creation (either pytorch or tensorflow)
@@ -23,6 +23,27 @@ bodyparts:
 - FR_gen
 - BL_gen
 - BR_gen
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
 
 
 # Fraction of video to start/stop when extracting frames for labeling/refinement
