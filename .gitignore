@@ -7,3 +7,7 @@ job_functions/__pycache__/failure_logger.cpython-312.pyc
 dlcfilterpipeline/__pycache__/__init__.cpython-312.pyc
 *.pyc
 /dlcfilterpipeline/__pycache__
+/.ipynb_checkpoints
+file_list.txt
+.idea
+__pycache__/
