@@ -7,7 +7,7 @@ import pandas as pd
 from tkinter import filedialog
 import os
 import json
-from extract_calibration_scale import get_meters_per_pixel
+from .extract_calibration_scale import get_meters_per_pixel
 
 class calculator_top_velocity:
     def __init__(self, data_file_path):
@@ -366,8 +366,15 @@ def create_master_excel(input_folder,excel_files,gui_enabled = False):
     df = pd.DataFrame(output_rows, columns=col_names)
     df.to_excel(os.path.join(input_folder,folder_name + "_MASTER.xlsx"), index=False)
 
-if __name__ == '__main__':
-    manual_folder = filedialog.askdirectory(title="Select Folder",initialdir="/Volumes/lake.s/Active/Shawn P/D. DATA (PROCESSED)/A. ELASTIN PROJECT/GAIT")
+def main(folder_path=None):
+    print('calculator_top_velocity.py: CALCULATE GAIT PARAMETERS FROM DATA.mat FILES')
+    if folder_path is None:
+        print('Select folder to run calculator_top_velocity.py')
+        manual_folder = filedialog.askdirectory(title="Select Folder")
+    else:
+        print('Running calculator_top_velocity.py in same folder as before')
+        manual_folder = folder_path
+
     files = sorted([f for f in os.listdir(manual_folder) if (f.endswith('.mat') and 'DATA' in f and not "._" in f)])
     try:
         files_to_exclude = get_excluded_filenames(manual_folder, files)
@@ -385,4 +392,6 @@ if __name__ == '__main__':
 
     create_master_excel(manual_folder,output_excel_files,gui_enabled = True)
 
+if __name__ == '__main__':
+    main()
 

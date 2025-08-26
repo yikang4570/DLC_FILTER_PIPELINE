@@ -2,7 +2,8 @@ import os
 import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk
-from aggregate_sub_files import aggregate_sub_files
+from .aggregate_sub_files import aggregate_sub_files
+from pathlib import Path
 
 class PNGReviewer:
     def __init__(self, root, folder_path, log_file="manually_determined_failures.txt"):
@@ -101,7 +102,8 @@ class PNGReviewer:
         self.update_progress_color()
         self.next_image()
 
-if __name__ == "__main__":
+def main():
+    print("failure_logger.py: LOG SUCCESSFUL AND FAILED TRIALS")
     root = tk.Tk()
     root.withdraw()
     folder = aggregate_sub_files(root)
@@ -113,5 +115,10 @@ if __name__ == "__main__":
             root = tk.Tk()
             app = PNGReviewer(root, f)
             root.mainloop()
+        p = Path(folder[0])
+        return p.parent.as_posix()
     else:
         print("No folder selected.")
+
+if __name__ == "__main__":
+    main()

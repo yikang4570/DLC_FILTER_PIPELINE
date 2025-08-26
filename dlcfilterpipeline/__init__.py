@@ -16,6 +16,8 @@ import os
 
 # Class nickname import
 from .manager import Manager
+from .extract_calibration_scale import main as _extract_calibration_scale
+from .calculator_top_velocity import main as _calculator_top_velocity
 
 # Package utils
 from .utils import dict_update_nested
@@ -80,5 +82,11 @@ def manager(*args,**kwargs):
     input_dict = pre_init(*args,**kwargs)
     return Manager(input_dict)
 
+def extract_calibration_scale(*args,**kwargs):
+    return _extract_calibration_scale(*args,**kwargs)
+
+def calculator_top_velocity(*args,**kwargs):
+    return _calculator_top_velocity(*args,**kwargs)
+
 # %% EXPLICITLY STATE HOW TO IMPORT THE ENTIRE MODULE (eg: import *)
-__all__ = ["manager", "Manager"]
+__all__ = ["manager", "Manager","extract_calibration_scale","calculator_top_velocity"]

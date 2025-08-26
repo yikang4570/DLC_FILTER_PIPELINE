@@ -44,9 +44,11 @@ def get_meters_per_pixel(video_path, real_length_m=0.381,gui_enabled=True,defaul
 
     return result
 
-if __name__ == '__main__':
+def main():
+    print("CHOOSE CALIBRATION FILE")
     video_path = filedialog.askopenfilename()
     m_per_px = get_meters_per_pixel(video_path)
     print(f"Meters per pixel: {m_per_px:.6f}")
 
-
+if __name__ == '__main__':
+    main()
