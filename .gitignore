@@ -6,3 +6,4 @@ job_functions/__pycache__/aggregate_sub_files.cpython-312.pyc
 job_functions/__pycache__/failure_logger.cpython-312.pyc
 dlcfilterpipeline/__pycache__/__init__.cpython-312.pyc
 *.pyc
+/dlcfilterpipeline/__pycache__
