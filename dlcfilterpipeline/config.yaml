@@ -7,7 +7,7 @@ identity:
 
 
 # Project path (change when moving around)
-project_path: dlcfilterpipeline/
+project_path: C:\Users\shawn.pavey\Documents\GitHub\DLC_FILTER_PIPELINE\dlcfilterpipeline
 
 
 # Default DeepLabCut engine to use for shuffle creation (either pytorch or tensorflow)
@@ -15,63 +15,7 @@ engine: pytorch
 
 
 # Annotation data set configuration (and individual video cropping parameters)
-video_sets:
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240610_4132_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240610_4135_02.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240610_4141_03.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240610_4146_11.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240624_4132_02.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240624_4135_03.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20240624_4141_04.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250103_4355_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250103_4365_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250103_4373_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250103_4394_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250103_4396_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250114_4355_02.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250114_4365_02.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250114_4373_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250114_4394_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250114_4396_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250121_4355_03.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250121_4365_03.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250121_4373_03.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250121_4394_03.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250121_4396_03.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250428_4551_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250428_4556_01.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250506_4551_02.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250506_4556_02.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250513_4551_03.avi:
-    crop: 0, 1280, 420, 720
-  /Volumes/lake.s/Active/Shawn P/AAA. DEEPLABCUT/0_TRACKING_ONLY/20250513_4556_03.avi:
-    crop: 0, 1280, 420, 720
+video_sets: None
 bodyparts:
 - Nose
 - Tail
@@ -79,6 +23,48 @@ bodyparts:
 - FR_gen
 - BL_gen
 - BR_gen
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
+
+
+# Fraction of video to start/stop when extracting frames for labeling/refinement
 
 
 # Fraction of video to start/stop when extracting frames for labeling/refinement

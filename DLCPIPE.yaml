@@ -1,7 +1,11 @@
 # DLCPIPE.yaml
 #
+# INSTRUCTIONS FOR CREATING DLC_PIPELINE ENVIRONMENT
+# cd folder_that_has_DLCPIPE.yaml
 # install: conda env create -f DLCPIPE.yaml
 # update:  conda env update -f DLCPIPE.yaml
+# activate: conda activate DLCPIPE
+
 name: DLCPIPE
 channels:
   - pytorch
@@ -10,17 +14,13 @@ channels:
 dependencies:
   - python=3.12
   - pip
-  - ffmpeg
-  - pytables==3.8.0
-  - cpuonly
-  - pytorch
-  - torchvision
-  - opencv
   - pip:
     - numpy~=1.26.4
     - pandas~=2.2.3
-    - readyplot~=1.4.4
+    - matplotlib~=3.10.0
+    - readyplot~=1.4.18
+    - tables~=3.10.2
     - scipy~=1.15.1
     - scikit-learn~=1.6.1
     - pathlib~=  1.0.1
-    - deeplabcut==3.0.0rc8
+    - ruamel.yaml == 0.18.6

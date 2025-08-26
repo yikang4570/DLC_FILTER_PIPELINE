@@ -257,7 +257,7 @@ class Manager:
         temp_plots = {}
 
         # KWARGS FOR READYPLOT, MOSTLY ESTHETICS BUT ALSO TITLE AND AVOIDING ERRORS WITH MARKER INPUT
-        cluster_ptk = {'title':self.bodyparts[n] + ": " + self.current_path.split(os.sep)[-1],
+        cluster_ptk = {'title':self.bodyparts[n] + ": " + self.current_path.split("/")[-1],
             'colors':self.cluster_colors, 'markers':self.cluster_markers, 'legend':None, 'darkmode':True}
 
         # ITERATIVELY INITIALIZE READYPLOT OBJECTS AND RETURN AN UNPACKABLE LIST OF THEM
@@ -267,7 +267,7 @@ class Manager:
     def cluster_plot_layout(self,tempDF,n,temp_plot0,temp_plot1):
         # ARRANGE SUBPLOTS AND APPLY EXTRA SETTINGS
         self.output_directory = self.create_analyzed_directory()
-        filename = self.current_path.split(os.sep)[-1] + self.bodyparts[n] + ".png"
+        filename = self.current_path.split("/")[-1] + self.bodyparts[n] + ".png"
         filepath = str(os.path.join(self.output_directory, filename))
 
         sub = rp.subplots(1, 2)
@@ -288,7 +288,7 @@ class Manager:
         self.cluster_colors = [tab20(i) for i in np.linspace(0, 1, 20)]
 
     def nose_tail_plot(self,n):
-        extra_plot_kwargs = {'title': self.ref_bodyparts[n] + ": " + self.current_path.split(os.sep)[-1],
+        extra_plot_kwargs = {'title': self.ref_bodyparts[n] + ": " + self.current_path.split("/")[-1],
                        'colors': self.cluster_colors, 'markers': self.cluster_markers, 'legend': None, 'darkmode': True}
 
         prex = self.df.loc[:, (slice(None), self.ref_bodyparts[n], 'x')].to_numpy().ravel()
@@ -306,7 +306,7 @@ class Manager:
         plot3 = rp.scatter(postx,postt, xlab='x', ylab='t', zlab='cluster', **extra_plot_kwargs)
 
         self.output_directory = self.create_analyzed_directory()
-        filename = self.current_path.split(os.sep)[-1] + self.ref_bodyparts[n] + ".png"
+        filename = self.current_path.split("/")[-1] + self.ref_bodyparts[n] + ".png"
         filepath = str(os.path.join(self.output_directory,filename))
 
         sub = rp.subplots(2, 2)
@@ -323,7 +323,7 @@ class Manager:
         sub.save()
 
     def plot_generator(self,frame=None):
-        title = self.current_path.split(os.sep)[-1]
+        title = self.current_path.split("/")[-1]
 
         df_pre, df_post = self.simplify_df(self.df), self.simplify_df(self.processed_df)
 
@@ -432,7 +432,7 @@ class Manager:
 # %% INTERNAL METHODS
     def set_config_pcutoff(self):
         """Set the pcutoff parameter in the config.yaml file to ensure DLC functions behave as expected."""
-        self.config_path = "dlcfilterpipeline" + os.sep + "config.yaml" #os.getcwd() + os.sep +
+        self.config_path = "dlcfilterpipeline" + "/" + "config.yaml" #os.getcwd() + "/" +
         yaml = YAML()
         with open(self.config_path, 'r') as file: data = yaml.load(file)
         data['pcutoff'] = self.pcutoff
@@ -487,7 +487,7 @@ class Manager:
         self.fix_config_abs_path()
 
         # SAVE THE CREATED MODEL NAME TO JSON FOR FUTURE USE
-        with open("dlcfilterpipeline" + os.sep + "model_name.json", 'r') as openfile:
+        with open("dlcfilterpipeline" + "/" + "model_name.json", 'r') as openfile:
             json_object = json.load(openfile)
             self.model_name = json_object["model_name"]
             print("CREATED MODEL NAME IS: ", self.model_name)
@@ -537,7 +537,7 @@ class Manager:
 
         # SAVE DIRECTORY
         directory, filename = os.path.split(self.data_file_name)
-        backup_directory = directory + os.sep + 'BACKUPS'
+        backup_directory = directory + "/" + 'BACKUPS'
         os.makedirs(backup_directory, exist_ok=True)
         backup_filepath = str(os.path.join(backup_directory, filename))
 
@@ -672,7 +672,7 @@ class Manager:
         if hasattr(self, 'output_directory'):return self.output_directory
         else:
             directory, matlab_filename = os.path.split(self.data_file_name)
-            split_dir = directory.split(os.sep)
+            split_dir = directory.split("/")
             print(split_dir)
 
             if split_dir[-1] == 'AVI':
@@ -680,9 +680,13 @@ class Manager:
                 new_dir_list = split_dir[:-2]
                 new_dir_list.append(outer_folder_name + 'analyzed')
                 matlab_directory = ''
-                for element in new_dir_list: matlab_directory += os.sep + element
+                for element in new_dir_list: matlab_directory += "/" + element
             else:
-                matlab_directory = directory + os.sep + 'analyzed'
+                matlab_directory = directory + "/" + 'analyzed'
 
-            os.makedirs(matlab_directory, exist_ok=True)
+            try:
+                os.makedirs(matlab_directory, exist_ok=True)
+            except:
+                matlab_directory = matlab_directory[1:]
+                os.makedirs(matlab_directory, exist_ok=True)
             return matlab_directory
