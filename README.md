@@ -158,7 +158,7 @@ running this code (<a href="#prerequisites">Prerequisites</a></li>).
 <br>
 
 #### SIMPLE JUPYTER NOTEBOOK USER INTERFACE
-A simple Jupyter notebook interface is provided for easily running this pipeline:
+A simple Jupyter notebook interface `DLC_PIPELINE.ipynb` is provided for easily running this pipeline:
 
 The first cell does the following in a single run:
 1. Loads data into the manager object
