@@ -85,7 +85,7 @@
 </p>
 
 Rodent gait analysis can be a painful bottleneck for labs in terms of data acquisition and analysis. This project was
-born out necessity to further automate this analysis and enhance the flexibility of the input data. With the Rodent
+born out of necessity to further automate gait analysis and enhance the flexibility of the input data. With the Rodent
 DeepLabCut pipeline, the user simply needs to use a single Jupyter notebook with 2 code blocks.
 
 The first code block prompts the user to click an avi file for automated pose estimation and step isolation. That's it!
@@ -96,9 +96,9 @@ calibration file, and automatically extracts gait parameters such as duty factor
 
 ### Built With DeepLabCut
 
-WRITE HERE
+Under the hood, this project is powered by DeepLabCut.
 
-* [![Next][Next.js]][Next-url]
+* [![DLC][DeepLabCut]][https://github.com/DeepLabCut/DeepLabCut-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
