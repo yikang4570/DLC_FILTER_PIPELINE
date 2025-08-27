@@ -46,7 +46,10 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#built-with">Built With</a></li>
+        <li><a href="#built-with">Built With DeepLabCut</a></li>
+        <li><a href="#wustl-musculoskeletal-soft-tissue-laboratory">WashU Musculoskeletal Soft Tissue Lab</a></li>
+        <li><a href="#gait-analysis-background">Gait Parameter References</a></li>
+        <li><a href="#built-for-mice">Built for C57;BL6 Mice</a></li>
       </ul>
     </li>
     <li>
@@ -54,10 +57,17 @@
       <ul>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#installation">Installation</a></li>
+        <li><a href="#tutorial">Tutorial</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
+    <li>
+      <a href="#adding-animals">Adding Different Mice or Rats</a>
+      <ul>
+        <li><a href="#dlc-parameters">Training a DLC Model</a></li>
+        <li><a href="#install-new-dlc">Installing a new DLC Model</a></li>
+        <li><a href="#expand">How to Expand the Project</a></li>
+      </ul>
+    </li>
     <li><a href="#contributing">Contributing</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
