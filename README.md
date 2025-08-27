@@ -21,7 +21,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE">
-    <img src="images/RDLC_STL_logo.png" alt="Logo" width="1536" height="1024">
+    <img src="images/RDLC_STL_logo.png" alt="Logo" width="600" height="200">
   </a>
 
   <h3 align="center">Best-README-Template</h3>
