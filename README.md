@@ -96,6 +96,30 @@ WRITE HERE
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+### WUSTL Musculoskeletal Soft Tissue Lab
+
+WRITE HERE
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Gait Analysis Background
+
+WRITE HERE
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Built for C57BL6 Mice and GAITOR
+
+WRITE HERE
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Project Structure
+
+WRITE HERE
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
 <!-- GETTING STARTED -->
 ## Getting Started
 
