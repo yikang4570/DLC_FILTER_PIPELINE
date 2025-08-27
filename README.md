@@ -85,7 +85,7 @@ The second code block asks the user to select an outer folder, then the folder f
 calibration file, and automatically extracts gait parameters such as duty factors, symmetry, step width etc...
 
 <p align="center">
-    <img src="images/Cartoon_intro.png" alt="Logo" width="200" height="125">
+    <img src="images/Pipeline.png" alt="Logo" width="800" height="400">
 </p>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
