@@ -74,7 +74,7 @@
 </details>
 
 
-
+***
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
@@ -92,6 +92,7 @@ calibration file, and automatically extracts gait parameters such as duty factor
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 ### Built With DeepLabCut
 
 Under the hood, this project is powered by a custom DeepLabCut-trained model for pose estimation:
@@ -111,6 +112,7 @@ A road map for integrating your own models is provided below:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 ### WUSTL Musculoskeletal Soft Tissue Lab
 
 This work was done in the Musculoskeletal Soft Tissue Laboratory at Washington University in Saint Louis. While you are
@@ -122,6 +124,7 @@ time:
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 ### Gait Analysis Background
 
 Other gait analysis pipelines often rely on multiple views of the rodent to determine foot strike timing, but this
@@ -181,6 +184,7 @@ the user can follow up with post-processing functions such as the three previous
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 <!-- GETTING STARTED -->
 ## Getting Started
 
@@ -188,6 +192,7 @@ WRITE HERE
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 ### Prerequisites
 
 WRITE HERE
@@ -198,6 +203,7 @@ WRITE HERE
   
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 ### Installation
 
 1. Get a free API Key at [https://example.com](https://example.com)
@@ -210,6 +216,7 @@ DLC VENV path in the notebook
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 ### Tutorial
 
 A simple Jupyter notebook interface is provided for easily running this pipeline. The first cell initiates pose 
@@ -235,6 +242,7 @@ flexibility is built in, any deviation from this structure has the potential to 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 <!-- ADDING ANIMALS AND BACKGROUNDS -->
 ## Adding Animals and Backgrounds
 
@@ -242,24 +250,28 @@ WRITE HERE
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 ### Training a DLC Model
 
 WRITE HERE
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 ### Installing a New DLC Model
 
 WRITE HERE
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 ### How to Expand the Project
 
 WRITE HERE
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+***
 <!-- CONTRIBUTING -->
 ## Contributing
 
@@ -274,6 +286,7 @@ Don't forget to give the project a star! Thanks again!
 4. Push to the Branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
+***
 ### Top contributors:
 
 <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE/graphs/contributors">
@@ -283,7 +296,7 @@ Don't forget to give the project a star! Thanks again!
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
+***
 <!-- LICENSE -->
 ## License
 
@@ -292,7 +305,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
+***
 <!-- CONTACT -->
 ## Contact
 
@@ -303,7 +316,7 @@ Project Link: [https://github.com/shawnpavey/DLC_FILTER_PIPELINE](https://github
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
-
+***
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
