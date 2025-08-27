@@ -84,7 +84,13 @@
     <img src="images/Cartoon_intro.png" alt="Logo" width="200" height="125">
 </p>
 
-WRITE HERE
+Rodent gait analysis can be a painful bottleneck for labs in terms of data acquisition and analysis. This project was
+born out necessity to further automate this analysis and enhance the flexibility of the input data. With the Rodent
+DeepLabCut pipeline, the user simply needs to use a single Jupyter notebook with 2 code blocks.
+
+The first code block prompts the user to click an avi file for automated pose estimation and step isolation. That's it!
+The second code block asks the user to select an outer folder, then the folder for a given batch, and finally a single
+calibration file, and automatically extracts gait parameters such as duty factors, symmetry, step width etc...
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -144,12 +150,14 @@ WRITE HERE
    ```sh
    git clone https://github.com/github_username/repo_name.git
    ```
+   
+DLC VENV path in the notebook
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Tutorial
 
-WRITE HERE
+TALK ABOUT FOLDER STRUCTURE
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -214,7 +222,7 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 <!-- CONTACT -->
 ## Contact
 
-Shawn Pavey - shawn.pavey@yahoo.com
+Shawn Pavey - shawn.pavey@wustl.edu
 
 Project Link: [https://github.com/shawnpavey/DLC_FILTER_PIPELINE](https://github.com/shawnpavey/DLC_FILTER_PIPELINE)
 
