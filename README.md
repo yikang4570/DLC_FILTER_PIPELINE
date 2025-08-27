@@ -24,19 +24,19 @@
     <img src="images/RDLC_STL_logo.jpg" alt="Logo" width="600" height="400">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Rodent DeepLabCut Pipeline, Musculoskeletal Soft Tissue Laboratory</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    An automated pipeline for extracting gait parameters from rodent videos!
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
+    <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE">View Demo</a>
     &middot;
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
-    <a href="https://github.com/othneildrew/Best-README-Template/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
