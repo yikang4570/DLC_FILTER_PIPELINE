@@ -47,9 +47,9 @@
       <a href="#about-the-project">About The Project</a>
       <ul>
         <li><a href="#built-with-deeplabcut">Built With DeepLabCut</a></li>
-        <li><a href="#wustl-musculoskeletal-soft-tissue-laboratory">WashU Musculoskeletal Soft Tissue Lab</a></li>
-        <li><a href="#gait-analysis-background">Gait Parameter References</a></li>
-        <li><a href="#built-for-mice">Built for C57;BL6 Mice and GAITOR</a></li>
+        <li><a href="#wustl-musculoskeletal-soft-tissue-lab">WUSTL Musculoskeletal Soft Tissue Lab</a></li>
+        <li><a href="#gait-analysis-background">Gait Analysis Background</a></li>
+        <li><a href="#built-for-c57bl6-mice-and-gaitor">Built for C57BL6 Mice and GAITOR</a></li>
         <li><a href="#project-structure">Project Structure</a></li>
       </ul>
     </li>
@@ -62,11 +62,11 @@
       </ul>
     </li>
     <li>
-      <a href="#adding-animals">Adding Different Mice, Rats, Backgrounds</a>
+      <a href="#adding-animals-and-backgrounds">Adding Animals and Backgrounds</a>
       <ul>
-        <li><a href="#dlc-parameters">Training a DLC Model</a></li>
-        <li><a href="#install-new-dlc">Installing a new DLC Model</a></li>
-        <li><a href="#expand">How to Expand the Project</a></li>
+        <li><a href="#training-a-dlc-model">Training a DLC Model</a></li>
+        <li><a href="#installing-a-new-dlc-model">Installing a new DLC Model</a></li>
+        <li><a href="#how-to-expand-the-project">How to Expand the Project</a></li>
       </ul>
     </li>
     <li><a href="#contributing">Contributing</a></li>
