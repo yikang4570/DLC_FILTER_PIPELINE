@@ -141,7 +141,13 @@ is provided in Prof. Kyle Allen's published work:
 
 ### Project Structure
 
-WRITE HERE
+The engine of this project is stored in the `dlcfilterpipeline` folder. Within that folder, package behavior is
+orchestrated by a manager object as defined in `manager.py`. Default inputs to this object creation are visible in the
+`__init__.py` file, which users can browse in case they need to tweak defaults (for example DBSCAN parameters).
+
+A DeepLabCut model is stored in `dlc-models-pytorch` and in the `config.yaml` file, and the functions "analyze" and
+"create labeled videos" are called in processes within your conda's DEEPLABCUT environment, which is a prerequisite for
+running this code (<a href="#prerequisites">Prerequisites</a></li>).
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
