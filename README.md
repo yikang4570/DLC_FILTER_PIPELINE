@@ -171,7 +171,6 @@ The second cell in the Jupyter notebook:
 1. Manually excludes faulty trials with a practical GUI (keyboard shortcuts enabled, Y for keep, N for exclude)
 2. Extracts scale information from the calibration video (pixels/m)
 3. Calculates gait parameters and adjusts spatial values for scale, creating a master sheet for the batch
-<br>
 
 #### Bonus DOCKER Functionality
 Some extra files included in this package include Docker files and helpers. An outdated but functional release of this 
