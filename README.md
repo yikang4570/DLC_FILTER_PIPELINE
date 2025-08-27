@@ -147,14 +147,14 @@ The engine of this project is stored in the `dlcfilterpipeline` folder. Within t
 orchestrated by a manager object as defined in `manager.py`. Default inputs to this object creation are visible in the
 `__init__.py` file, which users can browse in case they need to tweak defaults (for example DBSCAN parameters).
 
-<br><br>
+<br>
 
 #### DEEPLABCUT Processes
 A DeepLabCut model is stored in `dlc-models-pytorch` and in the `config.yaml` file, and the functions "analyze" and
 "create labeled videos" are called in processes within your conda's DEEPLABCUT environment, which is a prerequisite for
 running this code (<a href="#prerequisites">Prerequisites</a></li>).
 
-<br><br>
+<br>
 
 #### Simple Jupyter Notebook User Interface
 A simple Jupyter notebook interface is provided for easily running this pipeline:
@@ -170,7 +170,7 @@ The second cell in the Jupyter notebook:
 2. Extracts scale information from the calibration video (pixels/m)
 3. Calculates gait parameters and adjusts spatial values for scale, creating a master sheet for the batch
 
-<br><br>
+<br>
 
 #### Bonus DOCKER Functionality
 Some extra files included in this package include Docker files and helpers. An outdated but functional release of this 
