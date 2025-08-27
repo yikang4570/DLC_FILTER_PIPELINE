@@ -29,6 +29,8 @@
   <p align="center">
     An automated pipeline for extracting gait parameters from rodent videos!
     <br />
+    <a href="#getting-started">Jump to Getting Started</a>
+    &middot;
     <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE/issues/new?labels=enhancement&template=feature-request---.md">Report Bug or Request Feature</a>
   </p>
 </div>
@@ -115,7 +117,7 @@ This work was done in the Musculoskeletal Soft Tissue Laboratory at Washington U
 encouraged to reach out to the developer of this package with questions, feel free to contact relevant current members 
 as described on the lab website:
 
-* Prof. Lake's mSTL @ WUSTL: https://lakelab.wustl.edu
+* Prof. Spencer Lake's mSTL @ WUSTL: https://lakelab.wustl.edu
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
