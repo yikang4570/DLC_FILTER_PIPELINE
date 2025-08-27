@@ -163,9 +163,10 @@ The second cell in the Jupyter notebook provides 3 functions:
 
 NOTE (Folder Structure): Proper functioning of this package relies on a pretty strict folder structure. While some 
 flexibility is built in, any deviation from this structure has the potential to mess up its dreamy automation.
---> Structure: GAIT/20250827/AVI/20250303_4421_01.avi
---> Automatically Generated Output Structure: GAIT/20250827analyzed/SUBPLOTS
---> Most raw data and pose estimation is kept in the initial folder, all plots and DATA.mat files in the second
+
+* Structure: GAIT/20250827/AVI/20250303_4421_01.avi
+* Automatically Generated Output Structure: GAIT/20250827analyzed/SUBPLOTS
+* Most raw data and pose estimation is kept in the initial folder, all plots and DATA.mat files in the second
 
 Some extra files included in this package include Docker files and helpers. An outdated but functional release of this 
 project exists as a Docker image, though it can take quite a bit of work to funnel the correct inputs/volumes into the
