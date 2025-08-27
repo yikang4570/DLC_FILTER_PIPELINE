@@ -189,10 +189,10 @@ OVERVIEW FOR GETTING STARTED WITH THIS PACKAGE:
 
 If your setup is similar to the default setup in this project, you can get started:
 1. Install a conda distribution (Anaconda is the most general) to prepare for managing environments
-2. Create a DeepLabCut conda environment (<a href="#prerequisites">Prerequisites</a>)
+2. Create a DEEPLABCUT conda environment (<a href="#prerequisites">Prerequisites</a>)
 3. Create a DLCPIPE conda environment to run the notebook (<a href="#installation">Installation</a>)
-4. Edit `DLC_PIPELINE.ipynb` to include an accurate 'dlc_venv_path' (path to python in your DEEPLABCUT conda env, <a href="#prerequisites">Prerequisites</a>)
-5. Structure your data as described below as avi video files (<a href="#tutorial">Tutorial</a></li>)
+4. Update `DLC_PIPELINE.ipynb` inputs{'dlc_venv_path'} (python path for DEEPLABCUT conda env, <a href="#prerequisites">Prerequisites</a>)
+5. Structure your data as described below as avi video files (<a href="#tutorial">Tutorial</a>)
 6. Run the first cell in `DLC_PIPELINE.ipynb` for pose estimation (ensure DLCPIPE env is used)
 7. Run the second cell in `DLC_PIPELINE.ipynb` for gait parameter calculations 
 8. Analyze the master data with your preferred stats methods (we used JMP linear-mixed models)
