@@ -49,7 +49,6 @@
         <li><a href="#built-with-deeplabcut">Built With DeepLabCut</a></li>
         <li><a href="#wustl-musculoskeletal-soft-tissue-lab">WUSTL Musculoskeletal Soft Tissue Lab</a></li>
         <li><a href="#gait-analysis-background">Gait Analysis Background</a></li>
-        <li><a href="#built-for-c57bl6-mice-and-gaitor">Built for C57BL6 Mice and GAITOR</a></li>
         <li><a href="#project-structure">Project Structure</a></li>
       </ul>
     </li>
@@ -96,10 +95,18 @@ calibration file, and automatically extracts gait parameters such as duty factor
 
 ### Built With DeepLabCut
 
-Under the hood, this project is powered by a custom DeepLabCut-trained model for pose estimation. This is theoretically
-more flexible than using color-thresholding and adjacent methods, but is practically only as viable as the training 
-data allows, hence a road map for integrating your own models is provided below 
-(<a href="#adding-animals-and-backgrounds">Adding Animals and Backgrounds</a>)
+Under the hood, this project is powered by a custom DeepLabCut-trained model for pose estimation:
+
+* DeepLabCut: [https://github.com/DeepLabCut/DeepLabCut]
+
+This is theoretically more flexible than using color-thresholding and adjacent methods, but is practically only as 
+viable as the training data allows. The default model was trained on C57BL6 mice in the mouse GAITOR set up at 500 fps,
+similar to what has been described in Kyle Allen's work:
+
+* GAITOR Arena: [https://www.gaitor.org/spatiotemporal-only-arena.html]
+* Publication mentioning mouse arena adaptations: [https://www.nature.com/articles/s41598-018-28134-1]
+
+A road map for integrating your own models is provided below (<a href="#adding-animals-and-backgrounds">Adding Animals and Backgrounds</a>)
 
 * DeepLabCut: [https://github.com/DeepLabCut/DeepLabCut]
 
@@ -112,12 +119,6 @@ WRITE HERE
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Gait Analysis Background
-
-WRITE HERE
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-### Built for C57BL6 Mice and GAITOR
 
 WRITE HERE
 
