@@ -199,7 +199,7 @@ If your setup is similar to the default setup in this project, you can get start
 
 If you need to tweak the pipeline at all, here are some options:
 * Look at `__init__.py` to determine if there are readily available variables you could tweak in the notebook
-* Train your own DeepLabCut model if you have a different type of animal or arena (<a href="#training-a-dlc-model">Training a DLC Model</a></li>)
+* Train your own DeepLabCut model if you have a different type of animal or arena (<a href="#training-a-dlc-model">Training a DLC Model</a>)
 * Create an enhanced pipeline which can use the side view to improve contact detection (a href="#how-to-expand-the-project">How to Expand the Project</a>)
 * Contact us for situations listed above
 
