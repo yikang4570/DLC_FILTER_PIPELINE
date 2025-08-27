@@ -46,7 +46,7 @@
     <li>
       <a href="#about-the-project">About The Project</a>
       <ul>
-        <li><a href="#built-with">Built With DeepLabCut</a></li>
+        <li><a href="#built-with-deeplabcut">Built With DeepLabCut</a></li>
         <li><a href="#wustl-musculoskeletal-soft-tissue-laboratory">WashU Musculoskeletal Soft Tissue Lab</a></li>
         <li><a href="#gait-analysis-background">Gait Parameter References</a></li>
         <li><a href="#built-for-mice">Built for C57;BL6 Mice and GAITOR</a></li>
