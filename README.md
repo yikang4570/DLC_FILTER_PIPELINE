@@ -80,8 +80,8 @@
 </p>
 
 Rodent gait analysis can be a painful bottleneck for labs in terms of data acquisition and analysis. This project was
-born out of necessity to further automate gait analysis and enhance the flexibility of the input data. With the Rodent
-DeepLabCut pipeline, the user simply needs to use a single Jupyter notebook with 2 code blocks.
+born out of necessity to further automate gait analysis and enhance the flexibility of the input data. With the 
+Rodent_DLC_STL pipeline, the user simply needs to use a single Jupyter notebook with 2 code blocks.
 
 The first code block prompts the user to click an avi file for automated pose estimation and step isolation. That's it!
 The second code block asks the user to select an outer folder, then the folder for a given batch, and finally a single
@@ -102,9 +102,9 @@ similar to what has been described in Kyle Allen's work:
 * GAITOR Arena: [https://www.gaitor.org/spatiotemporal-only-arena.html]
 * Publication mentioning mouse arena adaptations: [https://www.nature.com/articles/s41598-018-28134-1]
 
-A road map for integrating your own models is provided below (<a href="#adding-animals-and-backgrounds">Adding Animals and Backgrounds</a>)
+A road map for integrating your own models is provided below 
 
-* DeepLabCut: [https://github.com/DeepLabCut/DeepLabCut]
+* <a href="#adding-animals-and-backgrounds">Adding Animals and Backgrounds</a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
