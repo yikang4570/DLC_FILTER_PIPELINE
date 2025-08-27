@@ -99,12 +99,12 @@ This is theoretically more flexible than using color-thresholding and adjacent m
 viable as the training data allows. The default model was trained on C57BL6 mice in the mouse GAITOR set up at 500 fps,
 similar to what has been described in Kyle Allen's work:
 
-* GAITOR Arena: [https://www.gaitor.org/spatiotemporal-only-arena.html]
-* Publication mentioning mouse arena adaptations: [https://www.nature.com/articles/s41598-018-28134-1]
+* GAITOR Arena: https://www.gaitor.org/spatiotemporal-only-arena.html
+* Publication mentioning mouse arena adaptations: https://www.nature.com/articles/s41598-018-28134-1
 
-A road map for integrating your own models is provided below 
+A road map for integrating your own models is provided below:
 
-* <a href="#adding-animals-and-backgrounds">Adding Animals and Backgrounds</a>
+* README: <a href="#adding-animals-and-backgrounds">Adding Animals and Backgrounds</a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
