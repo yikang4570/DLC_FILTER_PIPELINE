@@ -75,9 +75,6 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About The Project
-<p align="center">
-    <img src="images/Cartoon_intro.png" alt="Logo" width="200" height="125">
-</p>
 
 Rodent gait analysis can be a painful bottleneck for labs in terms of data acquisition and analysis. This project was
 born out of necessity to further automate gait analysis and enhance the flexibility of the input data. With the 
@@ -86,6 +83,10 @@ Rodent_DLC_STL pipeline, the user simply needs to use a single Jupyter notebook 
 The first code block prompts the user to click an avi file for automated pose estimation and step isolation. That's it!
 The second code block asks the user to select an outer folder, then the folder for a given batch, and finally a single
 calibration file, and automatically extracts gait parameters such as duty factors, symmetry, step width etc...
+
+<p align="center">
+    <img src="images/Cartoon_intro.png" alt="Logo" width="200" height="125">
+</p>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
