@@ -195,7 +195,7 @@ Don't forget to give the project a star! Thanks again!
 ### Top contributors:
 
 <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=oshawnpavey/DLC_FILTER_PIPELINE" alt="contrib.rocks image" />
+  <img src="https://contrib.rocks/image?repo=shawnpavey/DLC_FILTER_PIPELINE" alt="contrib.rocks image" />
 </a>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
