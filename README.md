@@ -185,8 +185,23 @@ the user can follow up with post-processing functions such as the three previous
 ***
 <!-- GETTING STARTED -->
 ## Getting Started
+OVERVIEW FOR GETTING STARTED WITH THIS PACKAGE:
 
-WRITE HERE
+If your setup is similar to the default setup in this project, you can get started:
+1. Install a conda distribution (Anaconda is the most general) to prepare for managing environments
+2. Create a DeepLabCut conda environment (<a href="#prerequisites">Prerequisites</a>)
+3. Create a DLCPIPE conda environment to run the notebook (<a href="#installation">Installation</a>)
+4. Edit `DLC_PIPELINE.ipynb` to include an accurate 'dlc_venv_path' (path to python in your DEEPLABCUT conda env, <a href="#prerequisites">Prerequisites</a>)
+5. Structure your data as described below as avi video files (<a href="#tutorial">Tutorial</a></li>)
+6. Run the first cell in `DLC_PIPELINE.ipynb` for pose estimation (ensure DLCPIPE env is used)
+7. Run the second cell in `DLC_PIPELINE.ipynb` for gait parameter calculations 
+8. Analyze the master data with your preferred stats methods (we used JMP linear-mixed models)
+
+If you need to tweak the pipeline at all, here are some options:
+* Look at `__init__.py` to determine if there are readily available variables you could tweak in the notebook
+* Train your own DeepLabCut model if you have a different type of animal or arena (<a href="#training-a-dlc-model">Training a DLC Model</a></li>)
+* Create an enhanced pipeline which can use the side view to improve contact detection (a href="#how-to-expand-the-project">How to Expand the Project</a>)
+* Contact us for situations listed above
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
