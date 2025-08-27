@@ -34,9 +34,7 @@
     <br />
     <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE">View Demo</a>
     &middot;
-    <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE/new?labels=bug&template=bug-report---.md">Report Bug</a>
-    &middot;
-    <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE/issues/new?labels=enhancement&template=feature-request---.md">Report Bug or Request Feature</a>
   </p>
 </div>
 
