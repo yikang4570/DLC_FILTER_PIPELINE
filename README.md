@@ -111,7 +111,11 @@ A road map for integrating your own models is provided below:
 
 ### WUSTL Musculoskeletal Soft Tissue Lab
 
-WRITE HERE
+This work was done in the Musculoskeletal Soft Tissue Laboratory at Washington University in Saint Louis. While you are
+encouraged to reach out to the developer of this package with questions, feel free to contact relevant current members 
+as described on the lab website:
+
+* Prof. Lake's mSTL @ WUSTL: https://lakelab.wustl.edu
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
