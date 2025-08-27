@@ -187,7 +187,8 @@ the user can follow up with post-processing functions such as the three previous
 ## Getting Started
 OVERVIEW FOR GETTING STARTED WITH THIS PACKAGE:
 
-If your setup is similar to the default setup in this project, you can get started:
+If your setup is similar to the default setup in this project (similar arena and 500 FPS camera and 20wk old C57BL6 
+mice, either uninjured or with partial Achilles tendon transection), you can get started:
 1. Install a conda distribution (Anaconda is the most general) to prepare for managing environments
 2. Create a DEEPLABCUT conda environment (<a href="#prerequisites">Prerequisites</a>)
 3. Create a DLCPIPE conda environment to run the notebook (<a href="#installation">Installation</a>)
