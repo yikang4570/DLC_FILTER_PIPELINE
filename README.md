@@ -138,7 +138,8 @@ is provided in Prof. Kyle Allen's published work:
 * Gait Parameters (Prof. Kyle Allen): https://pmc.ncbi.nlm.nih.gov/articles/PMC4180257/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
----
+
+***
 ### Project Structure
 
 #### Core Functionality
