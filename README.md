@@ -149,26 +149,15 @@ A DeepLabCut model is stored in `dlc-models-pytorch` and in the `config.yaml` fi
 "create labeled videos" are called in processes within your conda's DEEPLABCUT environment, which is a prerequisite for
 running this code (<a href="#prerequisites">Prerequisites</a></li>).
 
-A simple Jupyter notebook interface is provided for easily running this pipeline. The first cell initiates pose 
-estimation and footstrike detection. Press play, and simply multi-select avi files to run this automatically (roughly
-2.5 minutes per video). The for loop at the bottom of the cell showcases the object-oriented behavior of manager.
-The outputs of this cell include a variety of plots of pre- and post-filtered limb tracking (general pose estimation and
-footstep detection), labeled videos, and most importantly the DATA.mat files which consist of one row per footstep used
-for gait parameter calculation
+A simple Jupyter notebook interface is provided for easily running this pipeline:
 
-The second cell in the Jupyter notebook provides 3 functions:
-1. Manually exclude faulty trials with a practical GUI (keyboard shortcuts enabled, Y for keep, N for exclude)
-2. Extract scale information from the calibration video (pixels/m)
-3. Calculate gait parameters and adjust spatial values for scale, create a master sheet for the batch
+    The first cell 
 
-<em>
-NOTE (Folder Structure): Proper functioning of this package relies on a pretty strict folder structure. While some 
-flexibility is built in, any deviation from this structure has the potential to mess up its dreamy automation.
+    The second cell in the Jupyter notebook provides 3 functions:
+    1. Manually exclude faulty trials with a practical GUI (keyboard shortcuts enabled, Y for keep, N for exclude)
+    2. Extract scale information from the calibration video (pixels/m)
+    3. Calculate gait parameters and adjust spatial values for scale, create a master sheet for the batch
 
-* Structure: GAIT/20250827/AVI/20250303_4421_01.avi
-* Automatically Generated Output Structure: GAIT/20250827analyzed/SUBPLOTS
-* Most raw data and pose estimation is kept in the initial folder, all plots and DATA.mat files in the second
-</em>
 
 Some extra files included in this package include Docker files and helpers. An outdated but functional release of this 
 project exists as a Docker image, though it can take quite a bit of work to funnel the correct inputs/volumes into the
@@ -211,7 +200,26 @@ DLC VENV path in the notebook
 
 ### Tutorial
 
-TALK ABOUT FOLDER STRUCTURE
+A simple Jupyter notebook interface is provided for easily running this pipeline. The first cell initiates pose 
+estimation and footstrike detection. Press play, and simply multi-select avi files to run this automatically (roughly
+2.5 minutes per video). The for loop at the bottom of the cell showcases the object-oriented behavior of manager.
+The outputs of this cell include a variety of plots of pre- and post-filtered limb tracking (general pose estimation and
+footstep detection), labeled videos, and most importantly the DATA.mat files which consist of one row per footstep used
+for gait parameter calculation
+
+The second cell in the Jupyter notebook provides 3 functions:
+1. Manually exclude faulty trials with a practical GUI (keyboard shortcuts enabled, Y for keep, N for exclude)
+2. Extract scale information from the calibration video (pixels/m)
+3. Calculate gait parameters and adjust spatial values for scale, create a master sheet for the batch
+
+<em>
+NOTE (Folder Structure): Proper functioning of this package relies on a pretty strict folder structure. While some 
+flexibility is built in, any deviation from this structure has the potential to mess up its dreamy automation.
+
+* Structure: GAIT/20250827/AVI/20250303_4421_01.avi
+* Automatically Generated Output Structure: GAIT/20250827analyzed/SUBPLOTS
+* Most raw data and pose estimation is kept in the initial folder, all plots and DATA.mat files in the second
+</em>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
