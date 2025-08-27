@@ -151,12 +151,16 @@ running this code (<a href="#prerequisites">Prerequisites</a></li>).
 
 A simple Jupyter notebook interface is provided for easily running this pipeline:
 
-    The first cell 
+The first cell does the following in a single run:
+1. Loads data into the manager object
+2. Performs Pose Estimation
+3. Filters the data
+4. Extracts footsteps
 
-    The second cell in the Jupyter notebook provides 3 functions:
-    1. Manually exclude faulty trials with a practical GUI (keyboard shortcuts enabled, Y for keep, N for exclude)
-    2. Extract scale information from the calibration video (pixels/m)
-    3. Calculate gait parameters and adjust spatial values for scale, create a master sheet for the batch
+The second cell in the Jupyter notebook:
+1. Manually excludes faulty trials with a practical GUI (keyboard shortcuts enabled, Y for keep, N for exclude)
+2. Extracts scale information from the calibration video (pixels/m)
+3. Calculates gait parameters and adjusts spatial values for scale, creating a master sheet for the batch
 
 
 Some extra files included in this package include Docker files and helpers. An outdated but functional release of this 
