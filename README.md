@@ -98,7 +98,7 @@ calibration file, and automatically extracts gait parameters such as duty factor
 
 Under the hood, this project is powered by DeepLabCut.
 
-* [![DLC][DeepLabCut]][https://github.com/DeepLabCut/DeepLabCut-url]
+* [![DLC][DeepLabCut]][https://github.com/DeepLabCut/DeepLabCut]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
