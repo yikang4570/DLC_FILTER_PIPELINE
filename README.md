@@ -96,7 +96,9 @@ calibration file, and automatically extracts gait parameters such as duty factor
 
 ### Built With DeepLabCut
 
-Under the hood, this project is powered by DeepLabCut.
+Under the hood, this project is powered by a custom DeepLabCut-trained model for pose estimation. This is theoretically
+more flexible than using color-thresholding and adjacent methods, but is practically only as viable as the training 
+data allows, hence a road map for integrating your own models is provided below (<a href="#adding-animals-and-backgrounds">)
 
 * DeepLabCut: [https://github.com/DeepLabCut/DeepLabCut]
 
