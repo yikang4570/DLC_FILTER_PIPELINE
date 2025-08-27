@@ -29,8 +29,6 @@
   <p align="center">
     An automated pipeline for extracting gait parameters from rodent videos!
     <br />
-    <br />
-    <br />
     <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE">View Demo</a>
     &middot;
     <a href="https://github.com/shawnpavey/DLC_FILTER_PIPELINE/issues/new?labels=enhancement&template=feature-request---.md">Report Bug or Request Feature</a>
