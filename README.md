@@ -88,7 +88,7 @@ WRITE HERE
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Built With
+### Built With DeepLabCut
 
 WRITE HERE
 
