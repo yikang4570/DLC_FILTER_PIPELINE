@@ -115,7 +115,8 @@ A road map for integrating your own models is provided below:
 
 This work was done in the Musculoskeletal Soft Tissue Laboratory at Washington University in Saint Louis. While you are
 encouraged to reach out to the developer of this package with questions, feel free to contact relevant current members 
-as described on the lab website:
+as described on the lab website if you have additional questions or if I do not respond within a reasonable amount of
+time:
 
 * Prof. Spencer Lake's mSTL @ WUSTL: https://lakelab.wustl.edu
 
@@ -123,7 +124,18 @@ as described on the lab website:
 
 ### Gait Analysis Background
 
-WRITE HERE
+Other gait analysis pipelines often rely on multiple views of the rodent to determine foot strike timing, but this
+pipeline works with only a bottom view of the animal. Clustering (DBSCAN) is applied along with some custom filtering
+to determine paw contact, which is a decent assumption in mice (~5% error), but may not be immediately appropriate in 
+animals that hover the foot in the final position before contact (such as rats). More information is provided below 
+with regard to adding new animals to the pipeline and adding information from a side view for more accurate contact
+detection in rats (<a href="#adding-animals-and-backgrounds">Adding Animals and Backgrounds</a>).
+
+Explanations of the extracted gait parameters are partially described in the intro figure, but more detailed explanation
+is provided in Prof. Kyle Allen's published work:
+
+* Introductory figure (README): <a href="#about-the-project">About The Project</a>
+* Gait Parameters (Prof. Kyle Allen): https://pmc.ncbi.nlm.nih.gov/articles/PMC4180257/
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
