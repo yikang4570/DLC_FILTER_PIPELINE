@@ -230,23 +230,6 @@ conda env create -f DEEPLABCUT.yaml
 ```
 * Instructions recap: https://github.com/DeepLabCut/DeepLabCut/blob/main/docs/installation.md
 3. Create a DLCPIPE conda environment (below)
-4. Start Jupyter in DLCPIPE env or select Python interpreter manually in `DLC_PIPELINE.ipynb` 
-5. Change inputs:{'dlc_venv_path'} in the first cell to the DEEPLABCUT python path
-6. Optional: fine tune other inputs (variables listed in `__init__.py`)
-
-#### DEEPLABCUT
-* Download DeepLabCut's config.yaml: https://github.com/DeepLabCut/DeepLabCut/blob/main/conda-environments/DEEPLABCUT.yaml#
-* Navigate to the folder containing DEEPLABCUT.yaml in the terminal:
-```sh
-cd your/folder/path/here
-```
-* Create DEEPLABCUT environment
-```sh
-conda env create -f DEEPLABCUT.yaml
-```
-* Instructions recap: https://github.com/DeepLabCut/DeepLabCut/blob/main/docs/installation.md
-   
-#### DLCPIPE
 * Navigate to the folder containing DLCPIPE.yaml (this package location) in the terminal:
 ```sh
 cd your/folder/path/here
@@ -255,6 +238,9 @@ cd your/folder/path/here
 ```sh
 conda env create -f DLCPIPE.yaml
 ```
+4. Start Jupyter in DLCPIPE env or select Python interpreter manually in `DLC_PIPELINE.ipynb` 
+5. Change inputs:{'dlc_venv_path'} in the first cell to the DEEPLABCUT python path
+6. Optional: fine tune other inputs (variables listed in `__init__.py`)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
