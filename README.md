@@ -186,6 +186,8 @@ the user can follow up with post-processing functions such as the three previous
 <!-- GETTING STARTED -->
 ## Getting Started
 
+### Summary (Read next sections for detailed walk through)
+
 If your setup is similar to the default setup in this project (similar arena and 500 FPS camera and 20wk old C57BL6 
 mice, either uninjured or with partial Achilles tendon transection), you can get started:
 
@@ -201,7 +203,7 @@ mice, either uninjured or with partial Achilles tendon transection), you can get
 
 If you need to tweak the pipeline at all, here are some options:
 
-> OPTIONS/EXPANDING
+> OPTIONS/EXPANDING:
 > * Look at `__init__.py` to determine if there are readily available variables you could tweak in the notebook
 > * Train your own DeepLabCut model if you have a different type of animal or arena (<a href="#training-a-dlc-model">Training a DLC Model</a>)
 > * Create an enhanced pipeline incorporating the side view (<a href="#how-to-expand-the-project">How to Expand the Project</a>)
