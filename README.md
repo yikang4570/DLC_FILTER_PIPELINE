@@ -61,7 +61,7 @@
     <li>
       <a href="#adding-animals-and-backgrounds">Adding Animals and Backgrounds</a>
       <ul>
-        <li><a href="#training-a-dlc-model">Training a DLC Model</a></li>
+        <li><a href="#training-a-deeplabcut-model">Training a DeepLabCut Model</a></li>
         <li><a href="#installing-a-new-dlc-model">Installing a new DLC Model</a></li>
         <li><a href="#how-to-expand-the-project">How to Expand the Project</a></li>
       </ul>
