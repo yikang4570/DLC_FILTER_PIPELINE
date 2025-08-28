@@ -368,8 +368,9 @@ Project Link: [https://github.com/shawnpavey/DLC_FILTER_PIPELINE](https://github
 <!-- ACKNOWLEDGMENTS -->
 ## Acknowledgments
 
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
+* [DeepLabCut](https://github.com/DeepLabCut/DeepLabCut/tree/main)
+* [GAITOR](https://www.gaitor.org)
+* [Readyplot](https://github.com/shawnpavey/readyplot)
 * [Choose an Open Source License](https://choosealicense.com)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
