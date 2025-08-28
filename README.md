@@ -210,33 +210,25 @@ If you need to tweak the pipeline at all, here are some options:
 ### Prerequisites
 
 1. Conda distribution (likely Anaconda for most users): https://www.anaconda.com/download
-2. DeepLabCut conda environment:
-    * Download DeepLabCut's config.yaml: https://github.com/DeepLabCut/DeepLabCut/blob/main/conda-environments/DEEPLABCUT.yaml#
-    * Navigate to the folder containing config.yaml:
-   ```sh
-    cd your/folder/path/here
-    ```
-    * Create DEEPLABCUT environment
-   ```sh
-    conda env create -f DEEPLABCUT.yaml
-   ```
-    * Instructions recap: https://github.com/DeepLabCut/DeepLabCut/blob/main/docs/installation.md
-3. Bla
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
+2. DeepLabCut conda environment: https://github.com/DeepLabCut/DeepLabCut/blob/main/docs/installation.md
+3. Jupyter (included in Anaconda, but can also set up in other IDEs for convenience)
   
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ***
 ### Installation
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/github_username/repo_name.git
-   ```
+1. DeepLabCut
+* Download DeepLabCut's config.yaml: https://github.com/DeepLabCut/DeepLabCut/blob/main/conda-environments/DEEPLABCUT.yaml#
+* Navigate to the folder containing config.yaml:
+```sh
+cd your/folder/path/here
+```
+* Create DEEPLABCUT environment
+```sh
+conda env create -f DEEPLABCUT.yaml
+```
+* Instructions recap: https://github.com/DeepLabCut/DeepLabCut/blob/main/docs/installation.md
    
 DLC VENV path in the notebook
 
