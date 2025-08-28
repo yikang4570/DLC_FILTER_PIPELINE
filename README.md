@@ -230,14 +230,14 @@ If you need to tweak the pipeline at all, here are some options:
 > ```
 > * Instructions recap: https://github.com/DeepLabCut/DeepLabCut/blob/main/docs/installation.md
 3. Create a DLCPIPE conda environment
-* Navigate to the folder containing DLCPIPE.yaml (this package location) in the terminal:
-```sh
-cd your/folder/path/here
-```
-* Create DLCPIPE environment
-```sh
-conda env create -f DLCPIPE.yaml
-```
+> * Navigate to the folder containing DLCPIPE.yaml (this package location) in the terminal:
+> ```sh
+> cd your/folder/path/here
+> ```
+> * Create DLCPIPE environment
+> ```sh
+> conda env create -f DLCPIPE.yaml
+> ```
 4. Start Jupyter in DLCPIPE env or select Python interpreter manually in `DLC_PIPELINE.ipynb` 
 5. Change inputs:{'dlc_venv_path'} in the first cell to the DEEPLABCUT python path
 6. Optional: fine tune other inputs (variables listed in `__init__.py`)
