@@ -218,9 +218,16 @@ If you need to tweak the pipeline at all, here are some options:
 ***
 ### Installation
 
-1. DeepLabCut
+1. Download this project (download the folder/fork the repository)
+2. Create a DEEPLABCUT conda environment (below)
+3. Create a DLCPIPE conda environment (below)
+4. Select the correct Python interpreter for `DLC_PIPELINE.ipynb` (DLCPIPE)
+5. Change inputs:{'dlc_venv_path'} in the first cell to the DEEPLABCUT python path
+6. Optional: fine tune other inputs (variables listed in `__init__.py`)
+
+#### DEEPLABCUT
 * Download DeepLabCut's config.yaml: https://github.com/DeepLabCut/DeepLabCut/blob/main/conda-environments/DEEPLABCUT.yaml#
-* Navigate to the folder containing config.yaml:
+* Navigate to the folder containing DEEPLABCUT.yaml:
 ```sh
 cd your/folder/path/here
 ```
@@ -230,7 +237,15 @@ conda env create -f DEEPLABCUT.yaml
 ```
 * Instructions recap: https://github.com/DeepLabCut/DeepLabCut/blob/main/docs/installation.md
    
-DLC VENV path in the notebook
+#### DLCPIPE
+* Navigate to the folder containing DLCPIPE.yaml (this package location):
+```sh
+cd your/folder/path/here
+```
+* Create DLCPIPE environment
+```sh
+conda env create -f DLCPIPE.yaml
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
