@@ -171,7 +171,7 @@ The second cell in the Jupyter notebook:
 2. Extracts scale information from the calibration video (pixels/m)
 3. Calculates gait parameters and adjusts spatial values for scale, creating a master sheet for the batch
 
-#### DOCKER FUNCTIONALITY
+#### DOCKER FUNCTIONALITY (Advanced Users)
 Some extra files included in this package include Docker files and helpers. An outdated but functional release of this 
 project exists as a Docker image, though it can take quite a bit of work to funnel the correct inputs/volumes into the
 container, and the `failure_logger.py`, `extract_calibration_scale.py`, and `calculator_top_velocity.py` are not
@@ -227,7 +227,7 @@ If you need to tweak the pipeline at all, here are some options:
 
 #### DEEPLABCUT
 * Download DeepLabCut's config.yaml: https://github.com/DeepLabCut/DeepLabCut/blob/main/conda-environments/DEEPLABCUT.yaml#
-* Navigate to the folder containing DEEPLABCUT.yaml:
+* Navigate to the folder containing DEEPLABCUT.yaml in the terminal:
 ```sh
 cd your/folder/path/here
 ```
@@ -238,7 +238,7 @@ conda env create -f DEEPLABCUT.yaml
 * Instructions recap: https://github.com/DeepLabCut/DeepLabCut/blob/main/docs/installation.md
    
 #### DLCPIPE
-* Navigate to the folder containing DLCPIPE.yaml (this package location):
+* Navigate to the folder containing DLCPIPE.yaml (this package location) in the terminal:
 ```sh
 cd your/folder/path/here
 ```
@@ -252,17 +252,19 @@ conda env create -f DLCPIPE.yaml
 ***
 ### Tutorial
 
-A simple Jupyter notebook interface is provided for easily running this pipeline. The first cell initiates pose 
-estimation and footstrike detection. Press play, and simply multi-select avi files to run this automatically (roughly
-2.5 minutes per video). The for loop at the bottom of the cell showcases the object-oriented behavior of manager.
-The outputs of this cell include a variety of plots of pre- and post-filtered limb tracking (general pose estimation and
-footstep detection), labeled videos, and most importantly the DATA.mat files which consist of one row per footstep used
-for gait parameter calculation
+A simple Jupyter notebook interface is provided for easily running this pipeline. 
 
-The second cell in the Jupyter notebook provides 3 functions:
-1. Manually exclude faulty trials with a practical GUI (keyboard shortcuts enabled, Y for keep, N for exclude)
-2. Extract scale information from the calibration video (pixels/m)
-3. Calculate gait parameters and adjust spatial values for scale, create a master sheet for the batch
+The first cell performs pose estimation and footstrike detection. Press play, and simply multi-select avi files to 
+run this automatically (roughly 2.5 minutes per video). The outputs of this cell include a variety of plots of 
+pre- and post-filtered limb tracking (general pose estimation and footstep detection), labeled videos, and most 
+importantly the DATA.mat files which consist of one row per footstep used for gait parameter calculation.
+
+The second cell provides trial exclusion, pixel scaling, and gait parameter calculation. Press play, and you will
+be prompted to select an outer default folder (GAIT, see structure below), then select a batch (eg. GAIT/20250827analyzed 
+below), then press cancel. You will be taken to a GUI where you can keep or reject trials (keyboard shortcuts Y and N),
+these are written to a file that is read in the next step. After the trial exclusion GUI, select a bottom calibration
+file (scale bar within the bottom view), and click two points 15 inches apart. After this, gait parameters will
+automatically be calculated for the whole folder from the failure_logger as individual excel files and in a MASTER file.
 
 <em>
 NOTE (Folder Structure): Proper functioning of this package relies on a pretty strict folder structure. While some 
