@@ -246,7 +246,8 @@ If you need to tweak the pipeline at all, here are some options:
 > ```
 4. Start Jupyter in DLCPIPE env or select Python interpreter manually in `DLC_PIPELINE.ipynb` 
 5. Change inputs:{'dlc_venv_path'} in the first cell to the DEEPLABCUT python path
-6. Optional: fine tune other inputs (variables listed in `__init__.py`)
+6. Optional: fine tune other inputs (variables listed in `__init__.py` such as DBSCAN clustering parameters) or 
+parameters in config.yaml (eg. cropping)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -296,28 +297,67 @@ Excel files and in a MASTER file.
 <!-- ADDING ANIMALS AND BACKGROUNDS -->
 ## Adding Animals and Backgrounds
 
-WRITE HERE
+If your arena-animal combo is significantly different from this project's, you may need to train your own
+DeepLabCut model and insert it into this pipeline. Luckily I have done this already without too much hassle in rats.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ***
-### Training a DLC Model
+### Training a DeepLabCut Model
 
-WRITE HERE
+DeepLabCut is known to work extremely well with very few frames (~200), so by the time you get comfortable with the GUI 
+you should be able to train new models every couple days (potentially with some overnight training). So don't be 
+discouraged if your tracking is not perfect right away. Also be aware that small inconsistencies are filtered out by 
+this pipeline.
+
+#### Acquire Videos
+Ensure proper lighting, FPS (500 here, others have reported using 100 in rats), minimal parallax, and a representative
+variety of animals (eg. injured/uninjured, male/female, age range, velocity range). I recommend 10-20 separate videos.
+
+#### Create a New DeepLabCut Project
+Use the DeepLabCut GUI to build a new project. As much as possible, copy the structure of this project's config.yaml.
+Specifically, ensure if you change any names for tracked body parts that these are reflected in the `DLC_PIPELINE.ipynb`
+inputs (while this is feasible, it is easier to simply use the same tracked names as this project). 
+
+#### Label Frames
+Using 10-20 input videos, label 20 or so frames per video (putting you in the 200-400 training frames range, perhaps aim 
+higher if you have a diverse population). Bodyparts should be as follows ("_gen" is a legacy notation which, for a 
+previous version of the pipeline distinguished general tracking from model predictions of footstrike based off paw
+morphology which was abandoned when this version proved to be more consistent):
+* Nose
+* Tail
+* FL_gen
+* FR_gen
+* BL_gen
+* BR_gen
+
+#### Train a Model
+Feel free to try different base models depending on your application. 200 epochs should be more than enough to train
+the model. DeepLabCut should keep the best snapshot for your model, but you can also dynamically assess this when
+model performance plateaus.
+
+#### Supplemental Info
+For more details consult DeepLabCut's documentation: https://github.com/DeepLabCut/DeepLabCut
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ***
 ### Installing a New DLC Model
 
-WRITE HERE
+To install your new model, simply replace `config.yaml` and `dlc-models-pytorch` with your files. You may need to edit
+the config slightly depending on potential errors. You also need to replace the `model_name` in `DLC_PIPELINE.ipynb`
+inputs to match your new model. Lastly if you chose different bodypart names you should specify these in the inputs
+using the keys in `__init__.py`. 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ***
 ### How to Expand the Project
 
-WRITE HERE
+The structure of this project should make it very easy to expand. Within `manager.py`, simply add a class function
+within `self.single_process` between `self.custom_filter` and `self.save`. This function could detect when side views
+indicate foot contact, and wherever contact is not detected it could set the limb "likelihood" parameter in the data
+to 0 to ensure hovering is not counted as a footstep.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
