@@ -198,8 +198,10 @@ mice, either uninjured or with partial Achilles tendon transection), you can get
 > 6. Run the first cell in `DLC_PIPELINE.ipynb` for pose estimation (ensure DLCPIPE env is used)
 > 7. Run the second cell in `DLC_PIPELINE.ipynb` for gait parameter calculations 
 > 8. Analyze the master data with your preferred stats methods (we used JMP linear-mixed models)
->
-> If you need to tweak the pipeline at all, here are some options:
+
+If you need to tweak the pipeline at all, here are some options:
+
+> OPTIONS/EXPANDING
 > * Look at `__init__.py` to determine if there are readily available variables you could tweak in the notebook
 > * Train your own DeepLabCut model if you have a different type of animal or arena (<a href="#training-a-dlc-model">Training a DLC Model</a>)
 > * Create an enhanced pipeline incorporating the side view (<a href="#how-to-expand-the-project">How to Expand the Project</a>)
