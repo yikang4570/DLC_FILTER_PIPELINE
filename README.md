@@ -185,7 +185,6 @@ the user can follow up with post-processing functions such as the three previous
 ***
 <!-- GETTING STARTED -->
 ## Getting Started
-OVERVIEW FOR GETTING STARTED WITH THIS PACKAGE:
 
 If your setup is similar to the default setup in this project (similar arena and 500 FPS camera and 20wk old C57BL6 
 mice, either uninjured or with partial Achilles tendon transection), you can get started:
