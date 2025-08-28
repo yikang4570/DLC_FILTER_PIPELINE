@@ -221,7 +221,7 @@ If you need to tweak the pipeline at all, here are some options:
 1. Download this project (download the folder/fork the repository)
 2. Create a DEEPLABCUT conda environment (below)
 3. Create a DLCPIPE conda environment (below)
-4. Select the correct Python interpreter for `DLC_PIPELINE.ipynb` (DLCPIPE)
+4. Either start Jupyter in DLCPIPE environment or select that Python interpreter manually in `DLC_PIPELINE.ipynb` 
 5. Change inputs:{'dlc_venv_path'} in the first cell to the DEEPLABCUT python path
 6. Optional: fine tune other inputs (variables listed in `__init__.py`)
 
