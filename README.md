@@ -205,7 +205,7 @@ If you need to tweak the pipeline at all, here are some options:
 
 > OPTIONS/EXPANDING:
 > * Look at `__init__.py` to determine if there are readily available variables you could tweak in the notebook
-> * Train your own DeepLabCut model if you have a different type of animal or arena (<a href="#training-a-dlc-model">Training a DLC Model</a>)
+> * Train your own DeepLabCut model if you have a different type of animal or arena (<a href="#training-a-deeplabcut-model">Training a DLC Model</a>)
 > * Create an enhanced pipeline incorporating the side view (<a href="#how-to-expand-the-project">How to Expand the Project</a>)
 >* Contact us for situations not listed above (<a href="#contact">Contact</a>)
 
