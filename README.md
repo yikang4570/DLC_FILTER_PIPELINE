@@ -254,12 +254,14 @@ conda env create -f DLCPIPE.yaml
 
 A simple Jupyter notebook interface is provided for easily running this pipeline. 
 
+<hr style="border:0; height:1px; background:#ccc;">
 NOTE (Folder Structure): Proper functioning of this package relies on a pretty strict folder structure. While some 
 flexibility is built in, any deviation from this structure has the potential to mess up its dreamy automation.
 
 * Structure: GAIT/20250827/AVI/20250303_4421_01.avi
 * Automatically Generated Output Structure: GAIT/20250827analyzed/SUBPLOTS
 * Most raw data and pose estimation is kept in the initial folder, all plots and DATA.mat files in the second
+* <hr style="border:0; height:1px; background:#ccc;">
 
 #### CELL 1: Pose Estimation, Footstep Detection
 The first cell performs pose estimation and footstep detection. 
