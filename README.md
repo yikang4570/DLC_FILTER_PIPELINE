@@ -254,18 +254,6 @@ conda env create -f DLCPIPE.yaml
 
 A simple Jupyter notebook interface is provided for easily running this pipeline. 
 
-The first cell performs pose estimation and footstrike detection. Press play, and simply multi-select avi files to 
-run this automatically (roughly 2.5 minutes per video). The outputs of this cell include a variety of plots of 
-pre- and post-filtered limb tracking (general pose estimation and footstep detection), labeled videos, and most 
-importantly the DATA.mat files which consist of one row per footstep used for gait parameter calculation.
-
-The second cell provides trial exclusion, pixel scaling, and gait parameter calculation. Press play, and you will
-be prompted to select an outer default folder (GAIT, see structure below), then select a batch (eg. GAIT/20250827analyzed 
-below), then press cancel. You will be taken to a GUI where you can keep or reject trials (keyboard shortcuts Y and N),
-these are written to a file that is read in the next step. After the trial exclusion GUI, select a bottom calibration
-file (scale bar within the bottom view), and click two points 15 inches apart. After this, gait parameters will
-automatically be calculated for the whole folder from the failure_logger as individual excel files and in a MASTER file.
-
 <em>
 NOTE (Folder Structure): Proper functioning of this package relies on a pretty strict folder structure. While some 
 flexibility is built in, any deviation from this structure has the potential to mess up its dreamy automation.
@@ -273,6 +261,34 @@ flexibility is built in, any deviation from this structure has the potential to 
 * Structure: GAIT/20250827/AVI/20250303_4421_01.avi
 * Automatically Generated Output Structure: GAIT/20250827analyzed/SUBPLOTS
 * Most raw data and pose estimation is kept in the initial folder, all plots and DATA.mat files in the second
+</em>
+
+#### CELL 1: Pose Estimation, Footstep Detection
+The first cell performs pose estimation and footstep detection. 
+
+Press play, and simply multi-select avi files to run this automatically (roughly 2.5 minutes per video). 
+The outputs of this cell include a variety of plots of pre- and post-filtered limb tracking (general pose estimation 
+and footstep detection), labeled videos, and most importantly the DATA.mat files which consist of one row per footstep 
+used for gait parameter calculation.
+
+#### CELL 2: Exclusion, Scaling, Gait Parameters
+The second cell provides trial exclusion, pixel scaling, and gait parameter calculation. 
+
+Press play, and you will be prompted to select an outer default folder (eg. GAIT, see structure below), then select a 
+batch (eg. GAIT/20250827analyzed below), then press cancel. You will be taken to a GUI where you can keep or reject 
+trials (keyboard shortcuts Y and N), these are written to a file that is read in the next step. 
+
+After the trial exclusion GUI, select a bottom calibration file (scale bar within the bottom view), and click two 
+points 15 inches apart. 
+
+After this, gait parameters will automatically be calculated for the whole folder from the failure_logger as individual 
+Excel files and in a MASTER file.
+
+<em>
+NOTE (Independent py files): Some of the clunky GUI/folder selection is due to the fact that cell 2 actually strings
+together independent py files that can easily be used in parallel rather than the series approach of this pipeline.
+If you have a backlog perhaps it is easier to exclude within each batch then scale within each etc... But for the most
+part the automation in this pipeline should instead encourage quick and easy processing within days of acquiring data.
 </em>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
