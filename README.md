@@ -209,7 +209,19 @@ If you need to tweak the pipeline at all, here are some options:
 ***
 ### Prerequisites
 
-WRITE HERE
+1. Conda distribution (likely Anaconda for most users)
+2. DeepLabCut conda environment:
+    * Download DeepLabCut's config.yaml: 
+    * Navigate to the folder containing config.yaml:
+   ```sh
+    cd your/folder/path/here
+    ```
+    * Create DEEPLABCUT environment
+   ```sh
+    conda env create -f DLCPIPE.yaml
+   ```
+    * Instructions recap:
+3. Bla
 * npm
   ```sh
   npm install npm@latest -g
